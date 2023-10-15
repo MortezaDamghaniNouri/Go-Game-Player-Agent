@@ -37,13 +37,14 @@ def input_file_reader():
 
 
 # The main part of the code starts here
-my_stone_color, previous_boar, current_board = input_file_reader()
+my_stone_color, previous_board, current_board = input_file_reader()
 
 
-
-
-
-
+print("color: " + str(my_stone_color))
+print("previous_board: " + str(previous_board))
+print("===============================================")
+print("current_board: " + str(current_board))
+print("===============================================")
 
 
 
