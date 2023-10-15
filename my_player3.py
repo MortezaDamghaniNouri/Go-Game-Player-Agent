@@ -126,7 +126,7 @@ def groups_finder(input_board, group_color):
                 while True:
                     m = frontier[0][0]
                     n = frontier[0][1]
-                    frontier = frontier.pop(0)
+                    frontier.pop(0)
 
                     if (m + 1) < board_size and input_board[m + 1][n] == group_color and ([m + 1, n] not in frontier) and ([m + 1, n] not in expanded):
                         frontier.append([m + 1, n])
@@ -273,6 +273,16 @@ def output_file_generator(final_output):
 my_stone_color, previous_board, current_board = input_file_reader()
 
 print(is_in_groups([[[5, 5], [1, 2], [3, 1]], [[3, 5], [1, 2], [8, 6], [0, 0]], [[7, 2]]], [1, 2]))
+black_groups = groups_finder(current_board, 1)
+print("black groups: ")
+for i in black_groups:
+    print(i)
+print("===================================")
+white_groups = groups_finder(current_board, 2)
+print("white groups: ")
+for i in white_groups:
+    print(i)
+print("===================================")
 exit()
 
 output = go_game(my_stone_color, previous_board, current_board)
