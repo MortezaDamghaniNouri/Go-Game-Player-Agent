@@ -56,16 +56,16 @@ def all_of_my_empty_neighbors_finder(input_my_stone_color, input_current_board):
         j = 0
         while j < board_size:
             if input_current_board[i][j] == input_my_stone_color:
-                if (i + 1) < board_size and input_current_board[i + 1][j] == 0:
+                if (i + 1) < board_size and input_current_board[i + 1][j] == 0 and ([i + 1, j] not in output_list):
                     output_list.append([i + 1, j])
 
-                if (i - 1) >= 0 and input_current_board[i - 1][j] == 0:
+                if (i - 1) >= 0 and input_current_board[i - 1][j] == 0 and ([i - 1, j] not in output_list):
                     output_list.append([i - 1, j])
 
-                if (j + 1) < board_size and input_current_board[i][j + 1] == 0:
+                if (j + 1) < board_size and input_current_board[i][j + 1] == 0 and ([i, j + 1] not in output_list):
                     output_list.append([i, j + 1])
 
-                if (j - 1) >= 0 and input_current_board[i][j - 1] == 0:
+                if (j - 1) >= 0 and input_current_board[i][j - 1] == 0 and ([i, j - 1] not in output_list):
                     output_list.append([i, j - 1])
 
             j += 1
@@ -113,7 +113,6 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
             return [2, 2]
 
         all_of_my_empty_neighbors = all_of_my_empty_neighbors_finder(input_my_stone_color, input_current_board)
-
 
 
 
@@ -183,8 +182,6 @@ def output_file_generator(final_output):
 my_stone_color, previous_board, current_board = input_file_reader()
 
 output = go_game(my_stone_color, previous_board, current_board)
-print(output)
-exit()
 output_file_generator(output)
 
 
