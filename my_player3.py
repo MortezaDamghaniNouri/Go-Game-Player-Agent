@@ -1,5 +1,5 @@
 
-
+import random
 
 
 
@@ -87,6 +87,12 @@ def all_empty_points_finder(input_current_board):
             j += 1
         i += 1
     return output_list
+
+
+# This function chooses one of the elements of the input list randomly and returns it
+def random_chooser(input_list):
+    random_number = random.randint(0, (len(input_list) - 1))
+    return input_list[random_number]
 
 
 # Go game is implemented in this function
@@ -191,7 +197,7 @@ def output_file_generator(final_output):
 # The main part of the code starts here
 my_stone_color, previous_board, current_board = input_file_reader()
 
-print(all_empty_points_finder(current_board))
+print(random_chooser([[1, 3], [1, 1], [1, 2], [1, 8], [1, 0]]))
 exit()
 
 output = go_game(my_stone_color, previous_board, current_board)
