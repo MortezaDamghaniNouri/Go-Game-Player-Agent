@@ -74,18 +74,19 @@ def all_of_my_empty_neighbors_finder(input_my_stone_color, input_current_board):
     return output_list
 
 
-
-def all_
-
-
-
-
-
-
-
-
-
-
+# This function finds all of the empty points on the board
+def all_empty_points_finder(input_current_board):
+    output_list = []
+    board_size = len(input_current_board[0])
+    i = 0
+    while i < board_size:
+        j = 0
+        while j < board_size:
+            if input_current_board[i][j] == 0:
+                output_list.append([i, j])
+            j += 1
+        i += 1
+    return output_list
 
 
 # Go game is implemented in this function
@@ -189,6 +190,9 @@ def output_file_generator(final_output):
 
 # The main part of the code starts here
 my_stone_color, previous_board, current_board = input_file_reader()
+
+print(all_empty_points_finder(current_board))
+exit()
 
 output = go_game(my_stone_color, previous_board, current_board)
 output_file_generator(output)
