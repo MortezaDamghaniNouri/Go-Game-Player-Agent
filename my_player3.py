@@ -1,4 +1,15 @@
 
+
+
+
+
+
+
+
+
+
+
+# This function reads the input text file
 def input_file_reader():
     lines = []
     input_file = open("input.txt", "rt")
@@ -36,15 +47,100 @@ def input_file_reader():
     return input_my_stone_color, input_previous_board, input_current_board
 
 
+# Go game is implemented in this function
+def go_game(input_my_stone_color, input_previous_board, input_current_board):
+    board_size = len(input_current_board[0])
+    # playing as the black player
+    if input_my_stone_color == 1:
+        # checking whether it is the first move or not
+        all_zero = True
+        i = 0
+        while i < board_size:
+            j = 0
+            while j < board_size:
+                if input_current_board[i][j] != 0 or input_previous_board[i][j] != 0:
+                    all_zero = False
+                    break
+                j += 1
+
+            if not all_zero:
+                break
+
+            i += 1
+
+        if all_zero:
+            return [2, 2]
+
+        else:
+            return "all are not zero"
+
+
+
+
+
+
+
+
+    # playing as the white player
+    if input_my_stone_color == 2:
+        pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# This function generates the output file
+def output_file_generator(final_output):
+    pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # The main part of the code starts here
 my_stone_color, previous_board, current_board = input_file_reader()
 
-
-print("color: " + str(my_stone_color))
-print("previous_board: " + str(previous_board))
-print("===============================================")
-print("current_board: " + str(current_board))
-print("===============================================")
+output = go_game(my_stone_color, previous_board, current_board)
+print(output)
+exit()
+output_file_generator(output)
 
 
 
