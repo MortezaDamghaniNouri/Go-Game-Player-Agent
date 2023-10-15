@@ -95,6 +95,81 @@ def random_chooser(input_list):
     return input_list[random_number]
 
 
+# This function checks whether the input element is in the input groups or not
+def is_in_groups(input_groups, input_element):
+    i = 0
+    while i < len(input_groups):
+        current_group = input_groups[i]
+        if input_element in current_group:
+            return True
+        i += 1
+    return False
+
+
+
+
+
+
+
+
+# This function finds all of the groups whose color is the same as the input group_color
+def groups_finder(input_board, group_color):
+    groups = []
+    i = 0
+    board_size = len(input_board[0])
+    while i < board_size:
+        j = 0
+        while j < board_size:
+            if input_board[i][j] == group_color and (not is_in_groups(groups, [i, j])):
+                frontier = [[i, j]]
+                expanded = []
+                while True:
+                    m = frontier[0][0]
+                    n = frontier[0][1]
+                    frontier = frontier.pop(0)
+
+                    if (m + 1) < board_size and input_board[m + 1][n] == group_color and ([m + 1, n] not in frontier) and ([m + 1, n] not in expanded):
+                        frontier.append([m + 1, n])
+
+                    if (m - 1) >= 0 and input_board[m - 1][n] == group_color and ([m - 1, n] not in frontier) and ([m - 1, n] not in expanded):
+                        frontier.append([m - 1, n])
+
+                    if (n + 1) < board_size and input_board[m][n + 1] == group_color and ([m, n + 1] not in frontier) and ([m, n + 1] not in expanded):
+                        frontier.append([m, n + 1])
+
+                    if (n - 1) >= 0 and input_board[m][n - 1] == group_color and ([m, n - 1] not in frontier) and ([m, n - 1] not in expanded):
+                        frontier.append([m, n - 1])
+
+                    expanded.append([m, n])
+                    if len(frontier) == 0:
+                        break
+
+                groups.append(expanded)
+            j += 1
+        i += 1
+
+    return groups
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Go game is implemented in this function
 def go_game(input_my_stone_color, input_previous_board, input_current_board):
     board_size = len(input_current_board[0])
@@ -197,7 +272,7 @@ def output_file_generator(final_output):
 # The main part of the code starts here
 my_stone_color, previous_board, current_board = input_file_reader()
 
-print(random_chooser([[1, 3], [1, 1], [1, 2], [1, 8], [1, 0]]))
+print(is_in_groups([[[5, 5], [1, 2], [3, 1]], [[3, 5], [1, 2], [8, 6], [0, 0]], [[7, 2]]], [1, 2]))
 exit()
 
 output = go_game(my_stone_color, previous_board, current_board)
