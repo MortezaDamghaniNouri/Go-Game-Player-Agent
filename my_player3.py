@@ -1,6 +1,6 @@
 
 import random
-
+import copy
 
 
 
@@ -151,7 +151,48 @@ def groups_finder(input_board, group_color):
     return groups
 
 
+# This function checks whether the input group of points has liberty or not.
+def has_liberty(input_group, input_board):
+    board_size = len(input_board[0])
+    i = 0
+    while i < len(input_group):
+        m = input_group[i][0]
+        n = input_group[i][1]
+        if (m + 1) < board_size and input_board[m + 1][n] == 0:
+            return True
 
+        if (m - 1) >= 0 and input_board[m - 1][n] == 0:
+            return True
+
+        if (n + 1) < board_size and input_board[m][n + 1] == 0:
+            return True
+
+        if (n - 1) >= 0 and input_board[m][n - 1] == 0:
+            return True
+        i += 1
+    return False
+
+
+# This function applies capturing on the input board and it only considers the input color. It returns a new board and the number of removed stones of the input stone color.
+def capturing_applier(input_board, input_stone_color):
+    output = copy.deepcopy(input_board)
+    if input_stone_color == 1:
+        groups = groups_finder(input_board, 1)
+
+    if input_stone_color == 2:
+        groups = groups_finder(input_board, 2)
+
+    i = 0
+    while i < len(groups):
+        if not has_liberty(groups[i]):
+            j = 0
+            while j < len(groups[i]):
+                m = groups[i][j][0]
+                n = groups[i][j][1]
+                output[m][n] = 0
+                j += 1
+        i += 1
+    return output
 
 
 
@@ -273,16 +314,6 @@ def output_file_generator(final_output):
 my_stone_color, previous_board, current_board = input_file_reader()
 
 print(is_in_groups([[[5, 5], [1, 2], [3, 1]], [[3, 5], [1, 2], [8, 6], [0, 0]], [[7, 2]]], [1, 2]))
-black_groups = groups_finder(current_board, 1)
-print("black groups: ")
-for i in black_groups:
-    print(i)
-print("===================================")
-white_groups = groups_finder(current_board, 2)
-print("white groups: ")
-for i in white_groups:
-    print(i)
-print("===================================")
 exit()
 
 output = go_game(my_stone_color, previous_board, current_board)
