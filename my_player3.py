@@ -372,14 +372,9 @@ my_stone_color, previous_board, current_board = input_file_reader()
 
 
 
-
-
-
-
-
-
-
-
+my_list = [[0, 4], [4, 4], [1, 4], [0, 0]]
+new_list = suicide_points_remover(my_list, 1, current_board)
+print(new_list)
 
 exit()
 
