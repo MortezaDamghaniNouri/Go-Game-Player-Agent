@@ -243,23 +243,18 @@ def suicide_points_remover(input_list, input_stone_color, input_board):
             output = capturing_applier(board_copy, 1)
 
         new_board = output[0]
-        if input_stone_color == 1:
-            groups = groups_finder(new_board, 1)
-        if input_stone_color == 2:
-            groups = groups_finder(new_board, 2)
-
+        groups = groups_finder(new_board, input_stone_color)
         j = 0
         while j < len(groups):
             current_group = groups[j]
             if not has_liberty(current_group, new_board):
                 is_suicide_point = True
-                suicide_point = [input_list[i][0], input_list[i][1]]
+                suicide_point = [current_point[0], current_point[1]]
                 break
             j += 1
 
         if is_suicide_point:
             output_list.remove(suicide_point)
-
 
         i += 1
     return output_list
@@ -375,18 +370,16 @@ def output_file_generator(final_output):
 # The main part of the code starts here
 my_stone_color, previous_board, current_board = input_file_reader()
 
-visualizer(current_board)
 
-print("============================================")
-print("after removing white stones: ")
-output = capturing_applier(current_board, 2)
-visualizer(output[0])
-print("number of captures: " + str(output[1]))
-print("============================================")
-print("after removing black stones: ")
-output = capturing_applier(current_board, 1)
-visualizer(output[0])
-print("number of captures: " + str(output[1]))
+
+
+
+
+
+
+
+
+
 
 exit()
 
