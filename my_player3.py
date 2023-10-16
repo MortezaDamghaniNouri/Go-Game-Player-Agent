@@ -289,7 +289,7 @@ def how_many_captured(first_input_board, second_input_board, input_color):
             j += 1
         i += 1
 
-    return count_in_second_board - count_in_first_board
+    return count_in_first_board - count_in_second_board
 
 
 
@@ -434,9 +434,7 @@ my_stone_color, previous_board, current_board = input_file_reader()
 
 
 
-my_list = [[2, 2], [0, 2], [0, 0]]
-new_list = suicide_points_remover(my_list, 1, current_board)
-print(new_list)
+print(how_many_captured(previous_board, current_board, 2))
 
 exit()
 
