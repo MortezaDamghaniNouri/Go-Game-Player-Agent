@@ -228,6 +228,51 @@ def visualizer(input_board):
         i += 1
 
 
+# This function removes the suicide points from the input list of points for the given color
+def suicide_points_remover(input_list, input_stone_color, input_board):
+    output_list = copy.deepcopy(input_list)
+    i = 0
+    while i < len(input_list):
+        current_point = input_list[i]
+        is_suicide_point = False
+        board_copy = copy.deepcopy(input_board)
+        board_copy[current_point[0]][current_point[1]] = input_stone_color
+        if input_stone_color == 1:
+            output = capturing_applier(board_copy, 2)
+        if input_stone_color == 2:
+            output = capturing_applier(board_copy, 1)
+
+        new_board = output[0]
+        if input_stone_color == 1:
+            groups = groups_finder(new_board, 1)
+        if input_stone_color == 2:
+            groups = groups_finder(new_board, 2)
+
+        j = 0
+        while j < len(groups):
+            current_group = groups[j]
+            if not has_liberty(current_group, new_board):
+                is_suicide_point = True
+                suicide_point = [input_list[i][0], input_list[i][1]]
+                break
+            j += 1
+
+        if is_suicide_point:
+            output_list.remove(suicide_point)
+
+
+        i += 1
+    return output_list
+
+
+
+
+
+
+
+
+
+
 # Go game is implemented in this function
 def go_game(input_my_stone_color, input_previous_board, input_current_board):
     board_size = len(input_current_board[0])
