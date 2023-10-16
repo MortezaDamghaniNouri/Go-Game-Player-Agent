@@ -263,7 +263,16 @@ def suicide_points_remover(input_list, input_stone_color, input_board):
 
 # This function checks whether the two input boards are the same or not
 def are_the_same_boards(first_input_board, second_input_board):
-    pass
+    board_size = len(first_input_board[0])
+    i = 0
+    while i < board_size:
+        j = 0
+        while j < board_size:
+            if first_input_board[i][j] != second_input_board[i][j]:
+                return False
+            j += 1
+        i += 1
+    return True
 
 
 # This function counts the number of the stones of the input color which are removed from the first input board
