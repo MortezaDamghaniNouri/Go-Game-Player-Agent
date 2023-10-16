@@ -261,6 +261,68 @@ def suicide_points_remover(input_list, input_stone_color, input_board):
 
 
 
+# This function checks whether the two input boards are the same or not
+def are_the_same_boards(first_input_board, second_input_board):
+    pass
+
+
+# This function counts the number of the stones of the input color which are removed from the first input board
+def how_many_captured(first_input_board, second_input_board, input_color):
+    board_size = len(first_input_board[0])
+    count_in_first_board = 0
+    i = 0
+    while i < board_size:
+        j = 0
+        while j < board_size:
+            if first_input_board[i][j] == input_color:
+                count_in_first_board += 1
+            j += 1
+        i += 1
+
+    count_in_second_board = 0
+    i = 0
+    while i < board_size:
+        j = 0
+        while j < board_size:
+            if second_input_board[i][j] == input_color:
+                count_in_second_board += 1
+            j += 1
+        i += 1
+
+    return count_in_second_board - count_in_first_board
+
+
+
+
+
+
+
+
+
+
+
+# This function applies the KO rule om the elements of the input list and removes the elements which violate the KO rule
+def KO_rule_applier(input_list, input_current_board, input_previous_board, input_my_stone_color, ):
+    output_list = copy.deepcopy(input_list)
+    i = 0
+    while i < len(input_list):
+        current_point = input_list[i]
+        is_KO_violator = False
+        count_of_captures = how_many_captured()
+
+
+
+
+
+
+
+
+
+        i += 1
+
+
+
+
 
 
 
