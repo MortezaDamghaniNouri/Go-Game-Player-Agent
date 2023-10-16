@@ -182,33 +182,50 @@ def capturing_applier(input_board, input_stone_color):
     if input_stone_color == 2:
         groups = groups_finder(input_board, 2)
 
+    counter = 0
     i = 0
     while i < len(groups):
-        if not has_liberty(groups[i]):
+        if not has_liberty(groups[i], input_board):
             j = 0
             while j < len(groups[i]):
                 m = groups[i][j][0]
                 n = groups[i][j][1]
                 output[m][n] = 0
+                counter += 1
                 j += 1
         i += 1
-    return output
+    return [output, counter]
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# This function visualizes the input board
+def visualizer(input_board):
+    board_size = len(input_board[0])
+    k = 1
+    first_line = ""
+    while k <= board_size:
+        first_line = first_line + "=== "
+        k += 1
+    print(first_line)
+    i = 0
+    while i < board_size:
+        j = 0
+        line = ""
+        while j < board_size:
+            if input_board[i][j] == 1:
+                line = line + " X  "
+            if input_board[i][j] == 2:
+                line = line + " O  "
+            if input_board[i][j] == 0:
+                line = line + "    "
+            j += 1
+        print(line)
+        k = 1
+        line = ""
+        while k <= board_size:
+            line = line + "=== "
+            k += 1
+        print(line)
+        i += 1
 
 
 # Go game is implemented in this function
@@ -313,23 +330,7 @@ def output_file_generator(final_output):
 # The main part of the code starts here
 my_stone_color, previous_board, current_board = input_file_reader()
 
-black_groups = groups_finder(current_board, 1)
-white_groups = groups_finder(current_board, 2)
-print("black groups: ")
-for i in black_groups:
-    print(i)
-    print("has_liberty: " + str(has_liberty(i, current_board)))
-    print("================")
-print("============================================")
-print("white groups: ")
-for i in white_groups:
-    print(i)
-    print("has_liberty: " + str(has_liberty(i, current_board)))
-    print("================")
-
-
-
-
+visualizer(current_board)
 exit()
 
 output = go_game(my_stone_color, previous_board, current_board)
