@@ -331,6 +331,18 @@ def output_file_generator(final_output):
 my_stone_color, previous_board, current_board = input_file_reader()
 
 visualizer(current_board)
+
+print("============================================")
+print("after removing white stones: ")
+output = capturing_applier(current_board, 2)
+visualizer(output[0])
+print("number of captures: " + str(output[1]))
+print("============================================")
+print("after removing black stones: ")
+output = capturing_applier(current_board, 1)
+visualizer(output[0])
+print("number of captures: " + str(output[1]))
+
 exit()
 
 output = go_game(my_stone_color, previous_board, current_board)
