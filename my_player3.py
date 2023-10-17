@@ -346,7 +346,6 @@ def minimax_algorithm(input_points_list, input_current_board, input_my_stone_col
             new_current_board = capturing_output[0]
             my_capturing_point = capturing_output[1]
 
-
         # playing as the opponent
         empty_points_list = all_empty_points_finder(new_current_board)
         if len(empty_points_list) == 0:
@@ -386,7 +385,6 @@ def minimax_algorithm(input_points_list, input_current_board, input_my_stone_col
 
         i += 1
 
-
     if len(input_points_list) == 0:
         return input_points_list
     else:
@@ -404,10 +402,7 @@ def minimax_algorithm(input_points_list, input_current_board, input_my_stone_col
                 my_best_choices.append(points_and_utilities[b][0])
             b += 1
 
-
     return my_best_choices
-
-
 
 
 # Go game is implemented in this function
@@ -513,8 +508,8 @@ def output_file_generator(final_output):
 my_stone_color, previous_board, current_board = input_file_reader()
 
 
-my_list = [[4, 0], [4, 1], [3, 2]]
-print(KO_rule_applier(my_list, current_board, previous_board, 2))
+my_list = [[0, 2], [0, 3], [0, 4], [1, 4], [4, 0], [4, 1]]
+print("my best choices of Minimax algorithm: " + str(minimax_algorithm(my_list, current_board, 2)))
 
 
 
