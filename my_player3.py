@@ -326,7 +326,6 @@ def KO_rule_applier(input_list, input_current_board, input_previous_board, input
     return output_list
 
 
-
 # Minimax algorithm is implemented in this function
 def minimax_algorithm(input_points_list, input_current_board, input_my_stone_color):
     points_and_utilities = []
@@ -346,7 +345,6 @@ def minimax_algorithm(input_points_list, input_current_board, input_my_stone_col
             my_opponent_color = 1
             new_current_board = capturing_output[0]
             my_capturing_point = capturing_output[1]
-
 
 
         # playing as the opponent
@@ -387,7 +385,6 @@ def minimax_algorithm(input_points_list, input_current_board, input_my_stone_col
                 points_and_utilities.append([current_point, (my_capturing_point - my_opponent_final_choice[1])])
 
         i += 1
-
 
 
     if len(input_points_list) == 0:
