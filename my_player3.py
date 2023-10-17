@@ -337,44 +337,78 @@ def minimax_algorithm(input_points_list, input_current_board, input_my_stone_col
         copy_board[current_point[0]][current_point[1]] = input_my_stone_color
         if input_my_stone_color == 1:
             capturing_output = capturing_applier(copy_board, 2)
+            my_opponent_color = 2
+            new_current_board = capturing_output[0]
+            my_capturing_point = capturing_output[1]
+
         if input_my_stone_color == 2:
             capturing_output = capturing_applier(copy_board, 1)
+            my_opponent_color = 1
+            new_current_board = capturing_output[0]
+            my_capturing_point = capturing_output[1]
+
+
 
         # playing as the opponent
+        empty_points_list = all_empty_points_finder(new_current_board)
+        if len(empty_points_list) == 0:
+            points_and_utilities.append([current_point, my_capturing_point])
+        else:
+            my_opponent_legal_choices = suicide_points_remover(empty_points_list, my_opponent_color, new_current_board)
+            my_opponent_legal_choices = KO_rule_applier(my_opponent_legal_choices, new_current_board, copy_board, my_opponent_color)
+            if len(my_opponent_legal_choices) == 0:
+                points_and_utilities.append([current_point, my_capturing_point])
+            else:
+                my_opponent_points_and_utilities = []
+                k = 0
+                while k < len(my_opponent_legal_choices):
+                    current_opponent_point = my_opponent_legal_choices[k]
+                    new_copy_map = copy.deepcopy(new_current_board)
+                    new_copy_map[current_opponent_point[0]][current_opponent_point[1]] = my_opponent_color
+                    new_capturing_output = capturing_applier(new_copy_map, input_my_stone_color)
+                    my_opponent_points_and_utilities.append([current_opponent_point, new_capturing_output[1]])
+                    k += 1
 
+                my_opponent_best_choices = []
+                my_opponent_maximum_point = my_opponent_points_and_utilities[0][1]
+                b = 1
+                while b < len(my_opponent_points_and_utilities):
+                    if my_opponent_points_and_utilities[b][1] > my_opponent_maximum_point:
+                        my_opponent_maximum_point = my_opponent_points_and_utilities[b][1]
+                    b += 1
 
+                b = 0
+                while b < len(my_opponent_points_and_utilities):
+                    if my_opponent_points_and_utilities[b][1] == my_opponent_maximum_point:
+                        my_opponent_best_choices.append(my_opponent_points_and_utilities[b])
+                    b += 1
 
-
-
-
-
-
-
-
-
-
-
+                my_opponent_final_choice = random_chooser(my_opponent_best_choices)
+                points_and_utilities.append([current_point, (my_capturing_point - my_opponent_final_choice[1])])
 
         i += 1
 
 
 
+    if len(input_points_list) == 0:
+        return input_points_list
+    else:
+        my_maximum_point = points_and_utilities[0][1]
+        b = 1
+        while b < len(points_and_utilities):
+            if points_and_utilities[b][1] > my_maximum_point:
+                my_maximum_point = points_and_utilities[b][1]
+            b += 1
+
+        my_best_choices = []
+        b = 0
+        while b < len(points_and_utilities):
+            if points_and_utilities[b][1] == my_maximum_point:
+                my_best_choices.append(points_and_utilities[b][0])
+            b += 1
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return my_best_choices
 
 
 
