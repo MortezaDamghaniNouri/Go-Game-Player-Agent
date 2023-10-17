@@ -526,11 +526,12 @@ print("white point: " + str(white_point))
 exit()
 
 
-
+number_of_moves = 0
 while True:
 
     # black player turn
     my_agent_move = go_game(my_stone_color, previous_board, current_board)
+    number_of_moves += 1
     if my_agent_move != "PASS":
         all_empty_points = all_empty_points_finder(current_board)
         if my_agent_move not in all_empty_points:
@@ -540,7 +541,7 @@ while True:
                 KO_rule_applier([my_agent_move], current_board, previous_board, my_stone_color)) == 0:
             print(str(my_stone_color) + " is the loser because of KO or Suicide.")
             break
-        previous_board = current_board
+        previous_board = copy.deepcopy(current_board)
         current_board[my_agent_move[0]][my_agent_move[1]] = my_stone_color
 
     # white player turn
@@ -552,9 +553,38 @@ while True:
         my_opponent_move = "PASS"
     else:
         my_opponent_move = random_chooser(all_legal_points)
+        previous_board = copy.deepcopy(current_board)
+        current_board[my_opponent_move[0]][my_opponent_move[1]] = 2
+    number_of_moves += 1
 
     if my_opponent_move == "PASS" and my_agent_move == "PASS":
         black_point, white_point = points_calculator(current_board)
+        white_point = white_point + 2.5
+        print("Black point: " + str(black_point))
+        print("White point: " + str(white_point))
+        if black_point == white_point:
+            print("DRAW")
+        if black_point > white_point:
+            print("BLACK WON")
+        if white_point > black_point:
+            print("WHITE WON")
+        break
+
+    if number_of_moves >= 24:
+        if number_of_moves == 24:
+            black_point, white_point = points_calculator(current_board)
+            white_point = white_point + 2.5
+            print("Black point: " + str(black_point))
+            print("White point: " + str(white_point))
+            if black_point == white_point:
+                print("DRAW")
+            if black_point > white_point:
+                print("BLACK WON")
+            if white_point > black_point:
+                print("WHITE WON")
+        else:
+            print("ERROR: The total number of moves is more than 24!")
+        break
 
 
 
@@ -562,29 +592,4 @@ while True:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-exit()
-
-output = go_game(my_stone_color, previous_board, current_board)
-output_file_generator(output)
 
