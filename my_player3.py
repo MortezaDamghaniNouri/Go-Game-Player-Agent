@@ -300,38 +300,30 @@ def how_many_captured(first_input_board, second_input_board, input_color):
     return count_in_first_board - count_in_second_board
 
 
-
-
-
-
-
-
-
-
-
-# This function applies the KO rule om the elements of the input list and removes the elements which violate the KO rule
-def KO_rule_applier(input_list, input_current_board, input_previous_board, input_my_stone_color, ):
+# This function applies the KO rule on the elements of the input list and removes the elements which violate the KO rule
+def KO_rule_applier(input_list, input_current_board, input_previous_board, input_my_stone_color):
     output_list = copy.deepcopy(input_list)
     i = 0
     while i < len(input_list):
         current_point = input_list[i]
         is_KO_violator = False
-        count_of_captures = how_many_captured()
-
-
-
-
-
-
-
-
+        count_of_captures = how_many_captured(input_previous_board, input_current_board, input_my_stone_color)
+        if count_of_captures == 1:
+            copy_board = copy.deepcopy(input_current_board)
+            copy_board[current_point[0]][current_point[1]] = input_my_stone_color
+            if input_my_stone_color == 1:
+                new_board = capturing_applier(copy_board, 2)
+            if input_my_stone_color == 2:
+                new_board = capturing_applier(copy_board, 1)
+            if are_the_same_boards(new_board[0], input_previous_board):
+                is_KO_violator = True
+        if is_KO_violator:
+            violator_point = [current_point[0], current_point[1]]
+            output_list.remove(violator_point)
 
         i += 1
 
-
-
-
-
+    return output_list
 
 
 
