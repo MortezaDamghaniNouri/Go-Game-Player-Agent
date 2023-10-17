@@ -433,8 +433,14 @@ def output_file_generator(final_output):
 my_stone_color, previous_board, current_board = input_file_reader()
 
 
+my_list = [[4, 0], [4, 1], [3, 2]]
+print(KO_rule_applier(my_list, current_board, previous_board, 2))
 
-print(are_the_same_boards(previous_board, current_board))
+
+
+
+
+
 
 exit()
 
