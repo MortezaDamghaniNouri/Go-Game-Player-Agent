@@ -260,7 +260,6 @@ def suicide_points_remover(input_list, input_stone_color, input_board):
     return output_list
 
 
-
 # This function checks whether the two input boards are the same or not
 def are_the_same_boards(first_input_board, second_input_board):
     board_size = len(first_input_board[0])
@@ -443,7 +442,7 @@ my_stone_color, previous_board, current_board = input_file_reader()
 
 
 
-print(how_many_captured(previous_board, current_board, 2))
+print(are_the_same_boards(previous_board, current_board))
 
 exit()
 
