@@ -467,24 +467,6 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # This function generates the output file
 def output_file_generator(final_output):
     pass
@@ -508,41 +490,32 @@ def points_calculator(input_board):
     return black_counter, white_counter
 
 
-
-
-
-
-
-
-
 # The main part of the code starts here
 my_stone_color, previous_board, current_board = input_file_reader()
 
-black_point, white_point = points_calculator(current_board)
-
-print("black point: " + str(black_point))
-print("white point: " + str(white_point))
-
-exit()
-
-
 number_of_moves = 0
+round_number = 1
 while True:
-
+    print("Round Number: " + str(round_number))
     # black player turn
     my_agent_move = go_game(my_stone_color, previous_board, current_board)
     number_of_moves += 1
     if my_agent_move != "PASS":
         all_empty_points = all_empty_points_finder(current_board)
         if my_agent_move not in all_empty_points:
+            visualizer(current_board)
+            print("My Agent Move: " + str(my_agent_move))
             print(str(my_stone_color) + " is the loser because of an occupied point.")
             break
-        if len(suicide_points_remover([my_agent_move], my_stone_color, current_board)) == 0 or len(
-                KO_rule_applier([my_agent_move], current_board, previous_board, my_stone_color)) == 0:
+        if len(suicide_points_remover([my_agent_move], my_stone_color, current_board)) == 0 or len(KO_rule_applier([my_agent_move], current_board, previous_board, my_stone_color)) == 0:
+            visualizer(current_board)
+            print("My Agent Move: " + str(my_agent_move))
             print(str(my_stone_color) + " is the loser because of KO or Suicide.")
             break
         previous_board = copy.deepcopy(current_board)
         current_board[my_agent_move[0]][my_agent_move[1]] = my_stone_color
+        capturing_output = capturing_applier(current_board, 2)
+        current_board = capturing_output[0]
 
     # white player turn
     white_player_all_empty_points = all_empty_points_finder(current_board)
@@ -555,7 +528,13 @@ while True:
         my_opponent_move = random_chooser(all_legal_points)
         previous_board = copy.deepcopy(current_board)
         current_board[my_opponent_move[0]][my_opponent_move[1]] = 2
+        capturing_output = capturing_applier(current_board, 1)
+        current_board = capturing_output[0]
+
     number_of_moves += 1
+    print("My Agent Move: " + str(my_agent_move))
+    print("My Opponent Move: " + str(my_opponent_move))
+    visualizer(current_board)
 
     if my_opponent_move == "PASS" and my_agent_move == "PASS":
         black_point, white_point = points_calculator(current_board)
@@ -572,6 +551,7 @@ while True:
 
     if number_of_moves >= 24:
         if number_of_moves == 24:
+            print("The maximum number of moves is reached")
             black_point, white_point = points_calculator(current_board)
             white_point = white_point + 2.5
             print("Black point: " + str(black_point))
@@ -587,7 +567,8 @@ while True:
         break
 
 
-
+    print("================================================================================")
+    round_number += 1
 
 
 
