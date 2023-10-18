@@ -546,8 +546,9 @@ def output_file_generator(final_output):
 my_stone_color, previous_board, current_board = input_file_reader()
 
 
-my_list = [[0, 0], [0, 4], [4, 2], [4, 4], [2, 0]]
-print(two_eyes_points_remover(my_list, 1, current_board))
+my_list = [[1, 0], [4, 0], [3, 4], [4, 4]]
+capturing_output = capturing_applier(current_board, 2)
+print(visualizer(capturing_output[0]))
 
 
 
