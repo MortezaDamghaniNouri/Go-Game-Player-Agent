@@ -436,8 +436,10 @@ def two_eyes_points_remover(input_list, input_my_stone_color, input_current_boar
             j += 1
 
         if len(empty_neighbors_of_the_group) == 2:
-            output_list.remove(empty_neighbors_of_the_group[0])
-            output_list.remove(empty_neighbors_of_the_group[1])
+            if empty_neighbors_of_the_group[0] in output_list:
+                output_list.remove(empty_neighbors_of_the_group[0])
+            if empty_neighbors_of_the_group[1] in output_list:
+                output_list.remove(empty_neighbors_of_the_group[1])
 
         i += 1
 

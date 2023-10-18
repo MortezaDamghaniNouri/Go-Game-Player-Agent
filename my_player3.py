@@ -421,13 +421,15 @@ def two_eyes_points_remover(input_list, input_my_stone_color, input_current_boar
             current_member = current_group[j]
             m = current_member[0]
             n = current_member[1]
-            if (m + 1) < board_size and input_current_board[m + 1][n] == 0 and [(m + 1), n] not in empty_neighbors_of_the_group:
+            if (m + 1) < board_size and input_current_board[m + 1][n] == 0 and [(m + 1),
+                                                                                n] not in empty_neighbors_of_the_group:
                 empty_neighbors_of_the_group.append([(m + 1), n])
 
             if (m - 1) >= 0 and input_current_board[m - 1][n] == 0 and [(m - 1), n] not in empty_neighbors_of_the_group:
                 empty_neighbors_of_the_group.append([(m - 1), n])
 
-            if (n + 1) < board_size and input_current_board[m][n + 1] == 0 and [m, (n + 1)] not in empty_neighbors_of_the_group:
+            if (n + 1) < board_size and input_current_board[m][n + 1] == 0 and [m, (
+                    n + 1)] not in empty_neighbors_of_the_group:
                 empty_neighbors_of_the_group.append([m, (n + 1)])
 
             if (n - 1) >= 0 and input_current_board[m][n - 1] == 0 and [m, (n - 1)] not in empty_neighbors_of_the_group:
@@ -436,8 +438,10 @@ def two_eyes_points_remover(input_list, input_my_stone_color, input_current_boar
             j += 1
 
         if len(empty_neighbors_of_the_group) == 2:
-            output_list.remove(empty_neighbors_of_the_group[0])
-            output_list.remove(empty_neighbors_of_the_group[1])
+            if empty_neighbors_of_the_group[0] in output_list:
+                output_list.remove(empty_neighbors_of_the_group[0])
+            if empty_neighbors_of_the_group[1] in output_list:
+                output_list.remove(empty_neighbors_of_the_group[1])
 
         i += 1
 
