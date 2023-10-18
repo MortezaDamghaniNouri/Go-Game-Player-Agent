@@ -432,15 +432,27 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
         all_of_my_empty_neighbors = all_of_my_empty_neighbors_finder(input_my_stone_color, input_current_board)
         all_legal_points = suicide_points_remover(all_of_my_empty_neighbors, input_my_stone_color, input_current_board)
         all_legal_points = KO_rule_applier(all_legal_points, input_current_board, input_previous_board, input_my_stone_color)
-        all_legal_points = eyes_points_remover()
+        all_legal_points = two_eyes_points_remover(all_legal_points, )
         all_legal_points = minimax_algorithm(all_legal_points, input_current_board, input_my_stone_color)
         if len(all_legal_points) == 0:
-            pass
+            all_empty_points = all_empty_points_finder(input_current_board)
+            s = 0
+            while s < len(all_of_my_empty_neighbors):
+                all_empty_points.remove(all_of_my_empty_neighbors[s])
+                s += 1
+            all_empty_and_not_neighbors = all_empty_points
+            all_remaining_points = suicide_points_remover(all_empty_and_not_neighbors, input_my_stone_color, input_current_board)
+            all_remaining_points = KO_rule_applier(all_remaining_points, input_current_board, input_previous_board, input_my_stone_color)
+            all_remaining_points = two_eyes_points_remover(all_remaining_points, )
+            all_remaining_points = minimax_algorithm(all_remaining_points, input_current_board, input_my_stone_color)
+            if len(all_remaining_points) == 0:
+                return "PASS"
+            else:
+                return random_chooser(all_remaining_points)
 
-        if len(all_legal_points) == 1:
-            return all_legal_points[0]
 
-        if len(all_legal_points) >= 2:
+
+        else:
             return random_chooser(all_legal_points)
 
 
