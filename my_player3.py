@@ -458,6 +458,7 @@ def two_eyes_points_remover(input_list, input_my_stone_color, input_current_boar
 
     return output_list
 
+
 # Go game is implemented in this function
 def go_game(input_my_stone_color, input_previous_board, input_current_board):
     board_size = len(input_current_board[0])
@@ -532,12 +533,6 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
                         return random_chooser(good_choices_copy)
                     else:
                         return random_chooser(good_choices)
-
-
-
-
-
-
 
 
 
