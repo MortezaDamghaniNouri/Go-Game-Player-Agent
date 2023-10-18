@@ -473,7 +473,7 @@ def output_file_generator(final_output):
     pass
 
 
-
+# This function calculates the points of white and black players
 def points_calculator(input_board):
     board_size = len(input_board[0])
     black_counter = 0

@@ -405,9 +405,7 @@ def minimax_algorithm(input_points_list, input_current_board, input_my_stone_col
     return my_best_choices
 
 
-
-
-
+# This function removes the two eyes of groups from the input list
 def two_eyes_points_remover(input_list, input_my_stone_color, input_current_board):
     if len(input_list) == 0:
         return input_list
@@ -555,10 +553,8 @@ def output_file_generator(final_output):
 my_stone_color, previous_board, current_board = input_file_reader()
 
 
-my_list = [[3, 4], [4, 4]]
-groups = groups_finder(current_board, 1)
-for i in groups:
-    print(i)
+my_list = [[0, 0], [0, 4], [4, 2], [4, 4], [2, 0]]
+print(two_eyes_points_remover(my_list, 1, current_board))
 
 
 
