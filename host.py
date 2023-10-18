@@ -405,6 +405,45 @@ def minimax_algorithm(input_points_list, input_current_board, input_my_stone_col
     return my_best_choices
 
 
+# This function removes the two eyes of groups from the input list
+def two_eyes_points_remover(input_list, input_my_stone_color, input_current_board):
+    if len(input_list) == 0:
+        return input_list
+    output_list = copy.deepcopy(input_list)
+    board_size = len(input_current_board[0])
+    groups = groups_finder(input_current_board, input_my_stone_color)
+    i = 0
+    while i < len(groups):
+        current_group = groups[i]
+        j = 0
+        empty_neighbors_of_the_group = []
+        while j < len(current_group):
+            current_member = current_group[j]
+            m = current_member[0]
+            n = current_member[1]
+            if (m + 1) < board_size and input_current_board[m + 1][n] == 0 and [(m + 1), n] not in empty_neighbors_of_the_group:
+                empty_neighbors_of_the_group.append([(m + 1), n])
+
+            if (m - 1) >= 0 and input_current_board[m - 1][n] == 0 and [(m - 1), n] not in empty_neighbors_of_the_group:
+                empty_neighbors_of_the_group.append([(m - 1), n])
+
+            if (n + 1) < board_size and input_current_board[m][n + 1] == 0 and [m, (n + 1)] not in empty_neighbors_of_the_group:
+                empty_neighbors_of_the_group.append([m, (n + 1)])
+
+            if (n - 1) >= 0 and input_current_board[m][n - 1] == 0 and [m, (n - 1)] not in empty_neighbors_of_the_group:
+                empty_neighbors_of_the_group.append([m, (n - 1)])
+
+            j += 1
+
+        if len(empty_neighbors_of_the_group) == 2:
+            output_list.remove(empty_neighbors_of_the_group[0])
+            output_list.remove(empty_neighbors_of_the_group[1])
+
+        i += 1
+
+    return output_list
+
+
 # Go game is implemented in this function
 def go_game(input_my_stone_color, input_previous_board, input_current_board):
     board_size = len(input_current_board[0])
@@ -432,7 +471,7 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
         all_of_my_empty_neighbors = all_of_my_empty_neighbors_finder(input_my_stone_color, input_current_board)
         all_legal_points = suicide_points_remover(all_of_my_empty_neighbors, input_my_stone_color, input_current_board)
         all_legal_points = KO_rule_applier(all_legal_points, input_current_board, input_previous_board, input_my_stone_color)
-        all_legal_points = two_eyes_points_remover(all_legal_points, )
+        all_legal_points = two_eyes_points_remover(all_legal_points, input_my_stone_color, input_current_board)
         all_legal_points = minimax_algorithm(all_legal_points, input_current_board, input_my_stone_color)
         if len(all_legal_points) == 0:
             all_empty_points = all_empty_points_finder(input_current_board)
@@ -443,7 +482,7 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
             all_empty_and_not_neighbors = all_empty_points
             all_remaining_points = suicide_points_remover(all_empty_and_not_neighbors, input_my_stone_color, input_current_board)
             all_remaining_points = KO_rule_applier(all_remaining_points, input_current_board, input_previous_board, input_my_stone_color)
-            all_remaining_points = two_eyes_points_remover(all_remaining_points, )
+            all_remaining_points = two_eyes_points_remover(all_remaining_points, input_my_stone_color, input_current_board)
             all_remaining_points = minimax_algorithm(all_remaining_points, input_current_board, input_my_stone_color)
             if len(all_remaining_points) == 0:
                 return "PASS"
