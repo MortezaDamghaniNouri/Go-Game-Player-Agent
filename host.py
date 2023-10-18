@@ -421,13 +421,15 @@ def two_eyes_points_remover(input_list, input_my_stone_color, input_current_boar
             current_member = current_group[j]
             m = current_member[0]
             n = current_member[1]
-            if (m + 1) < board_size and input_current_board[m + 1][n] == 0 and [(m + 1), n] not in empty_neighbors_of_the_group:
+            if (m + 1) < board_size and input_current_board[m + 1][n] == 0 and [(m + 1),
+                                                                                n] not in empty_neighbors_of_the_group:
                 empty_neighbors_of_the_group.append([(m + 1), n])
 
             if (m - 1) >= 0 and input_current_board[m - 1][n] == 0 and [(m - 1), n] not in empty_neighbors_of_the_group:
                 empty_neighbors_of_the_group.append([(m - 1), n])
 
-            if (n + 1) < board_size and input_current_board[m][n + 1] == 0 and [m, (n + 1)] not in empty_neighbors_of_the_group:
+            if (n + 1) < board_size and input_current_board[m][n + 1] == 0 and [m, (
+                    n + 1)] not in empty_neighbors_of_the_group:
                 empty_neighbors_of_the_group.append([m, (n + 1)])
 
             if (n - 1) >= 0 and input_current_board[m][n - 1] == 0 and [m, (n - 1)] not in empty_neighbors_of_the_group:
@@ -444,7 +446,6 @@ def two_eyes_points_remover(input_list, input_my_stone_color, input_current_boar
         i += 1
 
     return output_list
-
 
 # Go game is implemented in this function
 def go_game(input_my_stone_color, input_previous_board, input_current_board):
@@ -471,6 +472,15 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
             return [2, 2]
 
         all_of_my_empty_neighbors = all_of_my_empty_neighbors_finder(input_my_stone_color, input_current_board)
+        if [0, 0] in all_of_my_empty_neighbors:
+            all_of_my_empty_neighbors.remove([0, 0])
+        if [0, 4] in all_of_my_empty_neighbors:
+            all_of_my_empty_neighbors.remove([0, 4])
+        if [4, 0] in all_of_my_empty_neighbors:
+            all_of_my_empty_neighbors.remove([4, 0])
+        if [4, 4] in all_of_my_empty_neighbors:
+            all_of_my_empty_neighbors.remove([4, 4])
+
         all_legal_points = suicide_points_remover(all_of_my_empty_neighbors, input_my_stone_color, input_current_board)
         all_legal_points = KO_rule_applier(all_legal_points, input_current_board, input_previous_board, input_my_stone_color)
         all_legal_points = two_eyes_points_remover(all_legal_points, input_my_stone_color, input_current_board)
@@ -482,6 +492,15 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
                 all_empty_points.remove(all_of_my_empty_neighbors[s])
                 s += 1
             all_empty_and_not_neighbors = all_empty_points
+            if [0, 0] in all_empty_and_not_neighbors:
+                all_empty_and_not_neighbors.remove([0, 0])
+            if [0, 4] in all_empty_and_not_neighbors:
+                all_empty_and_not_neighbors.remove([0, 4])
+            if [4, 0] in all_empty_and_not_neighbors:
+                all_empty_and_not_neighbors.remove([4, 0])
+            if [4, 4] in all_empty_and_not_neighbors:
+                all_empty_and_not_neighbors.remove([4, 4])
+
             all_remaining_points = suicide_points_remover(all_empty_and_not_neighbors, input_my_stone_color, input_current_board)
             all_remaining_points = KO_rule_applier(all_remaining_points, input_current_board, input_previous_board, input_my_stone_color)
             all_remaining_points = two_eyes_points_remover(all_remaining_points, input_my_stone_color, input_current_board)
