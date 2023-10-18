@@ -514,7 +514,7 @@ def output_file_generator(final_output):
 my_stone_color, previous_board, current_board = input_file_reader()
 
 
-my_list = [[0, 2], [4, 0], [0, 3], [0, 4], [1, 4], [4, 1]]
+my_list = [[3, 4], [4, 4]]
 print("my best choices of Minimax algorithm: " + str(minimax_algorithm(my_list, current_board, 1)))
 
 
