@@ -458,7 +458,6 @@ def two_eyes_points_remover(input_list, input_my_stone_color, input_current_boar
 
     return output_list
 
-
 # Go game is implemented in this function
 def go_game(input_my_stone_color, input_previous_board, input_current_board):
     board_size = len(input_current_board[0])
@@ -484,18 +483,22 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
             return [2, 2]
 
         all_of_my_empty_neighbors = all_of_my_empty_neighbors_finder(input_my_stone_color, input_current_board)
+        if [0, 0] in all_of_my_empty_neighbors:
+            all_of_my_empty_neighbors.remove([0, 0])
+        if [0, 4] in all_of_my_empty_neighbors:
+            all_of_my_empty_neighbors.remove([0, 4])
+        if [4, 0] in all_of_my_empty_neighbors:
+            all_of_my_empty_neighbors.remove([4, 0])
+        if [4, 4] in all_of_my_empty_neighbors:
+            all_of_my_empty_neighbors.remove([4, 4])
+
         all_legal_points = suicide_points_remover(all_of_my_empty_neighbors, input_my_stone_color, input_current_board)
         all_legal_points = KO_rule_applier(all_legal_points, input_current_board, input_previous_board, input_my_stone_color)
         all_legal_points = two_eyes_points_remover(all_legal_points, input_my_stone_color, input_current_board)
         all_legal_points = minimax_algorithm(all_legal_points, input_current_board, input_my_stone_color)
         if len(all_legal_points) == 0:
             all_empty_points = all_empty_points_finder(input_current_board)
-            s = 0
-            while s < len(all_of_my_empty_neighbors):
-                all_empty_points.remove(all_of_my_empty_neighbors[s])
-                s += 1
-            all_empty_and_not_neighbors = all_empty_points
-            all_remaining_points = suicide_points_remover(all_empty_and_not_neighbors, input_my_stone_color, input_current_board)
+            all_remaining_points = suicide_points_remover(all_empty_points, input_my_stone_color, input_current_board)
             all_remaining_points = KO_rule_applier(all_remaining_points, input_current_board, input_previous_board, input_my_stone_color)
             all_remaining_points = two_eyes_points_remover(all_remaining_points, input_my_stone_color, input_current_board)
             all_remaining_points = minimax_algorithm(all_remaining_points, input_current_board, input_my_stone_color)
@@ -518,10 +521,6 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
     # playing as the white player
     if input_my_stone_color == 2:
         pass
-
-
-
-
 
 
 
@@ -558,10 +557,10 @@ def output_file_generator(final_output):
 my_stone_color, previous_board, current_board = input_file_reader()
 
 
-my_list = [[0, 0], [0, 4], [4, 0], [4, 4], [2, 0]]
-print(two_eyes_points_remover(my_list, 1, current_board))
+my_list = [[0, 2], [4, 4]]
+print(minimax_algorithm(my_list, current_board, 1))
 
-
+print("go_game result: " + str(go_game(1, previous_board, current_board)))
 
 
 
