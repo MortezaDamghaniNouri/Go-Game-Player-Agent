@@ -536,12 +536,47 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
 
 
 
-
-
-
     # playing as the white player
     if input_my_stone_color == 2:
-        pass
+        all_zero = True
+        i = 0
+        while i < board_size:
+            j = 0
+            while j < board_size:
+                if input_previous_board[i][j] != 0:
+                    all_zero = False
+                    break
+                j += 1
+            if not all_zero:
+                break
+            i += 1
+
+        if all_zero:
+            # generating helper.txt
+            helper_file = open("helper.txt", "rt")
+            helper_file.write("1\n")
+            helper_file.close()
+
+            if input_current_board[2][2] == 0:
+                return [2, 2]
+
+            else:
+                good_choices_for_start = []
+                if input_current_board[1][2] == 0:
+                    good_choices_for_start.append([1, 2])
+                if input_current_board[2][3] == 0:
+                    good_choices_for_start.append([2, 3])
+                if input_current_board[2][1] == 0:
+                    good_choices_for_start.append([2, 1])
+                if input_current_board[3][2] == 0:
+                    good_choices_for_start.append([3, 2])
+                return random_chooser(good_choices_for_start)
+
+        else:
+            pass
+
+
+
 
 
 
