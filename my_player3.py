@@ -677,36 +677,11 @@ def output_file_generator(final_output):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # The main part of the code starts here
 my_stone_color, previous_board, current_board = input_file_reader()
 
 
 print(go_game(my_stone_color, previous_board, current_board))
-
-
-
 
 
 exit()
