@@ -695,7 +695,7 @@ def points_calculator(input_board):
 
 # The main part of the code starts here
 my_stone_color, previous_board, current_board = input_file_reader()
-
+board_size = len(current_board[0])
 number_of_moves = 0
 round_number = 1
 while True:
@@ -708,7 +708,26 @@ while True:
     if len(all_legal_points) == 0:
         my_opponent_move = "PASS"
     else:
-        my_opponent_move = random_chooser(all_legal_points)
+        all_zero = True
+        r = 0
+        while r < board_size:
+            p = 0
+            while p < board_size:
+                if previous_board[r][p] != 0:
+                    all_zero = False
+                    break
+                p += 1
+
+            if not all_zero:
+                break
+
+            r += 1
+
+        if all_zero:
+            my_opponent_move = [2, 2]
+        else:
+            my_opponent_move = random_chooser(all_legal_points)
+
         previous_board = copy.deepcopy(current_board)
         current_board[my_opponent_move[0]][my_opponent_move[1]] = 1
         capturing_output = capturing_applier(current_board, 2)
