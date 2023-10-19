@@ -573,13 +573,10 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
                 return random_chooser(good_choices_for_start)
 
         else:
-            print("IT IS NOT THE BEGINNING")
             helper_file = open("helper.txt", "rt")
             line = helper_file.readline()
             step = int(line.rstrip())
             helper_file.close()
-
-            print("the step is: " + str(step))
 
             if step == 12:
                 pass
@@ -588,7 +585,67 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
                 new_step = step + 1
                 helper_file.write(str(new_step) + "\n")
                 helper_file.close()
-                pass
+
+                all_empty_points = all_empty_points_finder(input_current_board)
+                all_remaining_points = suicide_points_remover(all_empty_points, input_my_stone_color, input_current_board)
+                all_remaining_points = KO_rule_applier(all_remaining_points, input_current_board, input_previous_board, input_my_stone_color)
+                all_remaining_points = two_eyes_points_remover(all_remaining_points, input_my_stone_color, input_current_board)
+                all_remaining_points = minimax_algorithm(all_remaining_points, input_current_board, input_my_stone_color)
+                if len(all_remaining_points) == 1:
+                    return all_remaining_points[0]
+                else:
+                    if len(all_remaining_points) == 0:
+                        return "PASS"
+
+                    else:
+                        all_of_my_empty_neighbors = all_of_my_empty_neighbors_finder(input_my_stone_color, input_current_board)
+                        good_choices = []
+                        p = 0
+                        while p < len(all_remaining_points):
+                            if all_remaining_points[p] in all_of_my_empty_neighbors:
+                                good_choices.append(all_remaining_points[p])
+                            p += 1
+
+                        if len(good_choices) == 0:
+                            copy_of_remaining_points = copy.deepcopy(all_remaining_points)
+                            if [0, 0] in all_remaining_points:
+                                all_remaining_points.remove([0, 0])
+                            if [0, 4] in all_remaining_points:
+                                all_remaining_points.remove([0, 4])
+                            if [4, 0] in all_remaining_points:
+                                all_remaining_points.remove([4, 0])
+                            if [4, 4] in all_remaining_points:
+                                all_remaining_points.remove([4, 4])
+                            if len(all_remaining_points) == 0:
+                                return random_chooser(copy_of_remaining_points)
+                            else:
+                                return random_chooser(all_remaining_points)
+
+                        else:
+                            good_choices_copy = copy.deepcopy(good_choices)
+                            if [0, 0] in good_choices:
+                                good_choices.remove([0, 0])
+                            if [0, 4] in good_choices:
+                                good_choices.remove([0, 4])
+                            if [4, 0] in good_choices:
+                                good_choices.remove([4, 0])
+                            if [4, 4] in good_choices:
+                                good_choices.remove([4, 4])
+
+                            if len(good_choices) == 0:
+                                return random_chooser(good_choices_copy)
+                            else:
+                                return random_chooser(good_choices)
+
+
+
+
+
+
+
+
+
+
 
 
 
