@@ -579,7 +579,37 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
             helper_file.close()
 
             if step == 12:
-                pass
+                all_empty_points = all_empty_points_finder(input_current_board)
+                all_legal_points = suicide_points_remover(all_empty_points, input_my_stone_color, input_current_board)
+                all_legal_points = KO_rule_applier(all_legal_points, input_current_board, input_previous_board, input_my_stone_color)
+                if len(all_legal_points) == 0:
+                    return "PASS"
+                else:
+                    my_final_choices = []
+                    r = 0
+                    while r < len(all_legal_points):
+                        current_point = all_legal_points[r]
+                        copy_current_board = copy.deepcopy(input_current_board)
+                        copy_current_board[current_point[0]][current_point[1]] = input_my_stone_color
+                        capturing_output = capturing_applier(copy_current_board, 1)
+                        my_final_choices.append([current_point, capturing_output[1]])
+                        r += 1
+
+                    maximum_point = my_final_choices[0][1]
+                    r = 1
+                    while r < len(my_final_choices):
+                        if my_final_choices[r][1] > maximum_point:
+                            maximum_point = my_final_choices[r][1]
+
+                    my_best_choices = []
+                    r = 0
+                    while r < len(my_final_choices):
+                        if my_final_choices[r][1] == maximum_point:
+                            my_best_choices.append(my_final_choices[r][0])
+                        r += 1
+
+                    return random_chooser(my_best_choices)
+
             else:
                 helper_file = open("helper.txt", "wt")
                 new_step = step + 1
