@@ -553,7 +553,7 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
 
         if all_zero:
             # generating helper.txt
-            helper_file = open("helper.txt", "rt")
+            helper_file = open("helper.txt", "wt")
             helper_file.write("1\n")
             helper_file.close()
 
@@ -573,9 +573,22 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
                 return random_chooser(good_choices_for_start)
 
         else:
-            pass
+            print("IT IS NOT THE BEGINNING")
+            helper_file = open("helper.txt", "rt")
+            line = helper_file.readline()
+            step = int(line.rstrip())
+            helper_file.close()
 
+            print("the step is: " + str(step))
 
+            if step == 12:
+                pass
+            else:
+                helper_file = open("helper.txt", "wt")
+                new_step = step + 1
+                helper_file.write(str(new_step) + "\n")
+                helper_file.close()
+                pass
 
 
 
@@ -613,10 +626,7 @@ def output_file_generator(final_output):
 my_stone_color, previous_board, current_board = input_file_reader()
 
 
-my_list = [[0, 2], [4, 4]]
-print(minimax_algorithm(my_list, current_board, 1))
-
-print("go_game result: " + str(go_game(1, previous_board, current_board)))
+go_game(my_stone_color, previous_board, current_board)
 
 
 
