@@ -626,7 +626,7 @@ def output_file_generator(final_output):
 my_stone_color, previous_board, current_board = input_file_reader()
 
 
-go_game(my_stone_color, previous_board, current_board)
+print(go_game(my_stone_color, previous_board, current_board))
 
 
 
