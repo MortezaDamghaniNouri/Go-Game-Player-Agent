@@ -600,6 +600,7 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
                     while r < len(my_final_choices):
                         if my_final_choices[r][1] > maximum_point:
                             maximum_point = my_final_choices[r][1]
+                        r += 1
 
                     my_best_choices = []
                     r = 0
@@ -666,17 +667,6 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
                                 return random_chooser(good_choices_copy)
                             else:
                                 return random_chooser(good_choices)
-
-
-
-
-
-
-
-
-
-
-
 
 
 
