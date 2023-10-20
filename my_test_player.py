@@ -313,6 +313,140 @@ def KO_rule_applier(input_list, input_current_board, input_previous_board, input
     return output_list
 
 
+# This function gets the current board and the color of a player and tells him his best move for gettig the most possible score out of opponent
+def what_is_the_best_choice(input_current_board, input_previous_board, input_my_stone_color):
+    all_empty_points = all_empty_points_finder(input_current_board)
+    if len(all_empty_points) == 0:
+        return [all_empty_points, 0]
+    else:
+        legal_points = suicide_points_remover(all_empty_points, input_my_stone_color, input_current_board)
+        legal_points = KO_rule_applier(legal_points, input_current_board, input_previous_board, input_my_stone_color)
+        if len(legal_points) == 0:
+            return [legal_points, 0]
+        else:
+            points_and_their_scores = []
+            if input_my_stone_color == 1:
+                my_opponent_color = 2
+            if input_my_stone_color == 2:
+                my_opponent_color = 1
+            i = 0
+            while i < len(legal_points):
+                current_point = legal_points[i]
+                new_current_board = copy.deepcopy(input_current_board)
+                new_current_board[current_point[0]][current_point[1]] = input_my_stone_color
+                capturing_applier_output = capturing_applier(new_current_board, my_opponent_color)
+                points_and_their_scores.append([current_point, capturing_applier_output[1]])
+                i += 1
+
+            maximum_score = points_and_their_scores[0][1]
+            i = 1
+            while i < len(points_and_their_scores):
+                if points_and_their_scores[i][1] > maximum_score:
+                    maximum_score = points_and_their_scores[i][1]
+                i += 1
+
+            best_final_choices = []
+            i = 0
+            while i < len(points_and_their_scores):
+                if points_and_their_scores[i][1] == maximum_score:
+                    best_final_choices.append(points_and_their_scores[i])
+                i += 1
+
+            return random_chooser(best_final_choices)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# A deepeer version of minimax algorithm is implemented in this function
+def deeper_minimax_algorithm(input_points_list, input_current_board, input_my_stone_color):
+    if input_my_stone_color == 1:
+        my_opponent_color = 2
+    if input_my_stone_color == 2:
+        my_opponent_color = 1
+
+
+    my_choices_and_their_points = []
+    i = 0
+    while i < len(input_points_list):
+        current_point = input_points_list[i]
+        previous_board = copy.deepcopy(input_current_board)
+        new_current_board = copy.deepcopy(input_current_board)
+        new_current_board[current_point[0]][current_point[1]] = input_my_stone_color
+        capturing_applier_output = capturing_applier(new_current_board, my_opponent_color)
+        new_current_board = capturing_applier_output[0]
+        current_point_score = capturing_applier_output[1]
+
+        what_is_the_best_choice_output = what_is_the_best_choice(new_current_board, my_opponent_color)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        i += 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Minimax algorithm is implemented in this function
 def minimax_algorithm(input_points_list, input_current_board, input_my_stone_color):
     points_and_utilities = []
@@ -668,6 +802,16 @@ def output_file_generator(final_output):
 
 # The main part of the code starts here
 my_stone_color, previous_board, current_board = input_file_reader()
+
+
+
+
+
+exit()
+
+
+
+
 output = go_game(my_stone_color, previous_board, current_board)
 output_file_generator(output)
 
