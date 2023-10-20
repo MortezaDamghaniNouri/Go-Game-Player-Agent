@@ -541,7 +541,7 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
         if all_zero:
             # generating helper.txt
             helper_file = open("helper.txt", "wt")
-            helper_file.write("1\n")
+            helper_file.write("2\n")
             helper_file.close()
 
             if input_current_board[2][2] == 0:
