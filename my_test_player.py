@@ -464,6 +464,10 @@ def deeper_minimax_algorithm(input_points_list, input_current_board, input_my_st
             my_choices_and_their_points.append([current_point, current_point_score])
         else:
             my_opponent_choice = random_chooser(what_is_the_best_choice_output)
+
+
+
+
             previous_board = copy.deepcopy(new_current_board)
             new_current_board = copy.deepcopy(new_current_board)
             new_current_board[my_opponent_choice[0][0]][my_opponent_choice[0][1]] = my_opponent_color
@@ -874,8 +878,8 @@ def output_file_generator(final_output):
 # The main part of the code starts here
 my_stone_color, previous_board, current_board = input_file_reader()
 
-
-print("what_is_the_best_choice final result: " + str(what_is_the_best_choice(current_board, previous_board, 2)))
+my_list = [[0, 2], [0, 3], [1, 3], [2, 4], [4, 2]]
+print("deeper minimax algorithm: " + str(deeper_minimax_algorithm(my_list, current_board, 1)))
 
 
 exit()
