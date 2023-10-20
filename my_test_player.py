@@ -352,9 +352,7 @@ def what_is_the_best_choice(input_current_board, input_previous_board, input_my_
                     best_final_choices.append(points_and_their_scores[i])
                 i += 1
 
-            print("points_and_their_scores: " + str(points_and_their_scores))
-            print("best_final_choices: " + str(best_final_choices))
-            return random_chooser(best_final_choices)
+            return best_final_choices
 
 
 
@@ -388,7 +386,22 @@ def deeper_minimax_algorithm(input_points_list, input_current_board, input_my_st
         new_current_board = capturing_applier_output[0]
         current_point_score = capturing_applier_output[1]
 
-        what_is_the_best_choice_output = what_is_the_best_choice(new_current_board, my_opponent_color)
+        what_is_the_best_choice_output = what_is_the_best_choice(input_current_board, previous_board, my_opponent_color)
+        if len(what_is_the_best_choice_output[0][0]) == 0:
+            my_choices_and_their_points.append([current_point, current_point_score])
+        else:
+            my_opponent_choice = random_chooser(what_is_the_best_choice_output)
+            previous_board = copy.deepcopy(new_current_board)
+            new_current_board = copy.deepcopy(new_current_board)
+            new_current_board[my_opponent_choice[0][0][0]][my_opponent_choice[0][0][1]] = my_opponent_color
+            capturing_applier_output = capturing_applier(new_current_board, input_my_stone_color)
+            new_current_board = capturing_applier_output[0]
+            current_point_score = current_point_score - capturing_applier_output[1]
+
+
+
+
+
 
 
 
