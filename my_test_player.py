@@ -313,7 +313,7 @@ def KO_rule_applier(input_list, input_current_board, input_previous_board, input
     return output_list
 
 
-# This function gets the current board and the color of a player and tells him his best move for gettig the most possible score out of opponent
+# This function gets the current board and the color of a player and tells him his best move for getting the most possible score out of opponent
 def what_is_the_best_choice(input_current_board, input_previous_board, input_my_stone_color):
     all_empty_points = all_empty_points_finder(input_current_board)
     if len(all_empty_points) == 0:
@@ -352,6 +352,8 @@ def what_is_the_best_choice(input_current_board, input_previous_board, input_my_
                     best_final_choices.append(points_and_their_scores[i])
                 i += 1
 
+            print("points_and_their_scores: " + str(points_and_their_scores))
+            print("best_final_choices: " + str(best_final_choices))
             return random_chooser(best_final_choices)
 
 
@@ -398,39 +400,7 @@ def deeper_minimax_algorithm(input_points_list, input_current_board, input_my_st
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         i += 1
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -804,7 +774,7 @@ def output_file_generator(final_output):
 my_stone_color, previous_board, current_board = input_file_reader()
 
 
-
+print("what_is_the_best_choice final result: " + str(what_is_the_best_choice(current_board, previous_board, 2)))
 
 
 exit()
