@@ -943,16 +943,6 @@ def output_file_generator(final_output):
 
 # The main part of the code starts here
 my_stone_color, previous_board, current_board = input_file_reader()
-
-my_list = [[0, 2], [0, 3], [1, 3], [2, 4], [4, 2]]
-print("deeper minimax algorithm: " + str(deeper_minimax_algorithm(my_list, current_board, 1)))
-
-
-exit()
-
-
-
-
 output = go_game(my_stone_color, previous_board, current_board)
 output_file_generator(output)
 
