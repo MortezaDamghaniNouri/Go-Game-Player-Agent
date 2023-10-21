@@ -312,17 +312,16 @@ def KO_rule_applier(input_list, input_current_board, input_previous_board, input
 
     return output_list
 
-
 # This function gets the current board and the color of a player and tells him his best move for getting the most possible score out of opponent
 def what_is_the_best_choice(input_current_board, input_previous_board, input_my_stone_color):
     all_empty_points = all_empty_points_finder(input_current_board)
     if len(all_empty_points) == 0:
-        return [all_empty_points, 0]
+        return [[all_empty_points, 0]]
     else:
         legal_points = suicide_points_remover(all_empty_points, input_my_stone_color, input_current_board)
         legal_points = KO_rule_applier(legal_points, input_current_board, input_previous_board, input_my_stone_color)
         if len(legal_points) == 0:
-            return [legal_points, 0]
+            return [[legal_points, 0]]
         else:
             points_and_their_scores = []
             if input_my_stone_color == 1:
