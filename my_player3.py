@@ -477,6 +477,10 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
         line = black_helper_file.readline()
         step = int(line.rstrip())
         black_helper_file.close()
+        black_helper_file = open("black_helper.txt", "wt")
+        black_helper_file.write(str(step + 1) + "\n")
+        black_helper_file.close()
+
         if step == 2 or step == 3 or step == 4 or step == 5:
             if input_current_board[1][2] == 0 or input_current_board[2][1] == 0 or input_current_board[2][3] == 0 or input_current_board[3][2] == 0:
                 my_good_starting_choices = []
@@ -586,6 +590,23 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
             line = helper_file.readline()
             step = int(line.rstrip())
             helper_file.close()
+
+            if step == 2 or step == 3 or step == 4 or step == 5:
+                if input_current_board[1][2] == 0 or input_current_board[2][1] == 0 or input_current_board[2][3] == 0 or input_current_board[3][2] == 0:
+                    my_good_starting_choices = []
+                    if input_current_board[1][2] == 0:
+                        my_good_starting_choices.append([1, 2])
+                    if input_current_board[2][1] == 0:
+                        my_good_starting_choices.append([2, 1])
+                    if input_current_board[2][3] == 0:
+                        my_good_starting_choices.append([2, 3])
+                    if input_current_board[3][2] == 0:
+                        my_good_starting_choices.append([3, 2])
+                    helper_file = open("helper.txt", "wt")
+                    new_step = step + 1
+                    helper_file.write(str(new_step) + "\n")
+                    helper_file.close()
+                    return random_chooser(my_good_starting_choices)
 
             if step == 12:
                 all_empty_points = all_empty_points_finder(input_current_board)
