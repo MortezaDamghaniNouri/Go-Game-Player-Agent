@@ -477,6 +477,19 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
         line = black_helper_file.readline()
         step = int(line.rstrip())
         black_helper_file.close()
+        if step == 2 or step == 3 or step == 4 or step == 5:
+            if input_current_board[1][2] == 0 or input_current_board[2][1] == 0 or input_current_board[2][3] == 0 or input_current_board[3][2] == 0:
+                my_good_starting_choices = []
+                if input_current_board[1][2] == 0:
+                    my_good_starting_choices.append([1, 2])
+                if input_current_board[2][1] == 0:
+                    my_good_starting_choices.append([2, 1])
+                if input_current_board[2][3] == 0:
+                    my_good_starting_choices.append([2, 3])
+                if input_current_board[3][2] == 0:
+                    my_good_starting_choices.append([3, 2])
+                return random_chooser(my_good_starting_choices)
+
         all_empty_points = all_empty_points_finder(input_current_board)
         all_remaining_points = suicide_points_remover(all_empty_points, input_my_stone_color, input_current_board)
         all_remaining_points = KO_rule_applier(all_remaining_points, input_current_board, input_previous_board,
@@ -530,12 +543,6 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
                         return random_chooser(good_choices_copy)
                     else:
                         return random_chooser(good_choices)
-
-
-
-
-
-
 
 
     # playing as the white player
@@ -674,7 +681,6 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
                                 return random_chooser(good_choices_copy)
                             else:
                                 return random_chooser(good_choices)
-
 
 
 # This function generates the output file
