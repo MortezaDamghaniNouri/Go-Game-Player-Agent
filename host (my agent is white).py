@@ -326,6 +326,210 @@ def KO_rule_applier(input_list, input_current_board, input_previous_board, input
     return output_list
 
 
+
+# This function gets the current board and the color of a player and tells him his best move for getting the most possible score out of opponent
+def what_is_the_best_choice(input_current_board, input_previous_board, input_my_stone_color):
+    all_empty_points = all_empty_points_finder(input_current_board)
+    if len(all_empty_points) == 0:
+        return [[all_empty_points, 0]]
+    else:
+        legal_points = suicide_points_remover(all_empty_points, input_my_stone_color, input_current_board)
+        legal_points = KO_rule_applier(legal_points, input_current_board, input_previous_board, input_my_stone_color)
+        if len(legal_points) == 0:
+            return [[legal_points, 0]]
+        else:
+            points_and_their_scores = []
+            if input_my_stone_color == 1:
+                my_opponent_color = 2
+            if input_my_stone_color == 2:
+                my_opponent_color = 1
+            i = 0
+            while i < len(legal_points):
+                current_point = legal_points[i]
+                new_current_board = copy.deepcopy(input_current_board)
+                new_current_board[current_point[0]][current_point[1]] = input_my_stone_color
+                capturing_applier_output = capturing_applier(new_current_board, my_opponent_color)
+                points_and_their_scores.append([current_point, capturing_applier_output[1]])
+                i += 1
+
+            maximum_score = points_and_their_scores[0][1]
+            i = 1
+            while i < len(points_and_their_scores):
+                if points_and_their_scores[i][1] > maximum_score:
+                    maximum_score = points_and_their_scores[i][1]
+                i += 1
+
+            best_final_choices = []
+            i = 0
+            while i < len(points_and_their_scores):
+                if points_and_their_scores[i][1] == maximum_score:
+                    best_final_choices.append(points_and_their_scores[i])
+                i += 1
+
+            return best_final_choices
+
+
+
+
+
+# Minimax algorithm is implemented in this function and it returns the best choices and the scores of them
+def minimax_algorithm_returning_scores(input_points_list, input_current_board, input_my_stone_color):
+    points_and_utilities = []
+    i = 0
+    while i < len(input_points_list):
+        current_point = input_points_list[i]
+        copy_board = copy.deepcopy(input_current_board)
+        copy_board[current_point[0]][current_point[1]] = input_my_stone_color
+        if input_my_stone_color == 1:
+            capturing_output = capturing_applier(copy_board, 2)
+            my_opponent_color = 2
+            new_current_board = capturing_output[0]
+            my_capturing_point = capturing_output[1]
+
+        if input_my_stone_color == 2:
+            capturing_output = capturing_applier(copy_board, 1)
+            my_opponent_color = 1
+            new_current_board = capturing_output[0]
+            my_capturing_point = capturing_output[1]
+
+        # playing as the opponent
+        empty_points_list = all_empty_points_finder(new_current_board)
+        if len(empty_points_list) == 0:
+            points_and_utilities.append([current_point, my_capturing_point])
+        else:
+            my_opponent_legal_choices = suicide_points_remover(empty_points_list, my_opponent_color, new_current_board)
+            my_opponent_legal_choices = KO_rule_applier(my_opponent_legal_choices, new_current_board, copy_board, my_opponent_color)
+            if len(my_opponent_legal_choices) == 0:
+                points_and_utilities.append([current_point, my_capturing_point])
+            else:
+                my_opponent_points_and_utilities = []
+                k = 0
+                while k < len(my_opponent_legal_choices):
+                    current_opponent_point = my_opponent_legal_choices[k]
+                    new_copy_map = copy.deepcopy(new_current_board)
+                    new_copy_map[current_opponent_point[0]][current_opponent_point[1]] = my_opponent_color
+                    new_capturing_output = capturing_applier(new_copy_map, input_my_stone_color)
+                    my_opponent_points_and_utilities.append([current_opponent_point, new_capturing_output[1]])
+                    k += 1
+
+                my_opponent_best_choices = []
+                my_opponent_maximum_point = my_opponent_points_and_utilities[0][1]
+                b = 1
+                while b < len(my_opponent_points_and_utilities):
+                    if my_opponent_points_and_utilities[b][1] > my_opponent_maximum_point:
+                        my_opponent_maximum_point = my_opponent_points_and_utilities[b][1]
+                    b += 1
+
+                b = 0
+                while b < len(my_opponent_points_and_utilities):
+                    if my_opponent_points_and_utilities[b][1] == my_opponent_maximum_point:
+                        my_opponent_best_choices.append(my_opponent_points_and_utilities[b])
+                    b += 1
+
+                my_opponent_final_choice = random_chooser(my_opponent_best_choices)
+                points_and_utilities.append([current_point, (my_capturing_point - my_opponent_final_choice[1])])
+
+        i += 1
+
+    if len(input_points_list) == 0:
+        return input_points_list
+    else:
+        my_maximum_point = points_and_utilities[0][1]
+        b = 1
+        while b < len(points_and_utilities):
+            if points_and_utilities[b][1] > my_maximum_point:
+                my_maximum_point = points_and_utilities[b][1]
+            b += 1
+
+        my_best_choices = []
+        b = 0
+        while b < len(points_and_utilities):
+            if points_and_utilities[b][1] == my_maximum_point:
+                my_best_choices.append(points_and_utilities[b])
+            b += 1
+
+    return my_best_choices
+
+
+
+
+# A deepeer version of minimax algorithm is implemented in this function
+def deeper_minimax_algorithm(input_points_list, input_current_board, input_my_stone_color):
+    if input_my_stone_color == 1:
+        my_opponent_color = 2
+    if input_my_stone_color == 2:
+        my_opponent_color = 1
+
+    my_choices_and_their_points = []
+    i = 0
+    while i < len(input_points_list):
+        current_point = input_points_list[i]
+        previous_board = copy.deepcopy(input_current_board)
+        new_current_board = copy.deepcopy(input_current_board)
+        new_current_board[current_point[0]][current_point[1]] = input_my_stone_color
+        capturing_applier_output = capturing_applier(new_current_board, my_opponent_color)
+        new_current_board = capturing_applier_output[0]
+        current_point_score = capturing_applier_output[1]
+
+        what_is_the_best_choice_output = what_is_the_best_choice(new_current_board, previous_board, my_opponent_color)
+        if len(what_is_the_best_choice_output[0][0]) == 0:
+            my_choices_and_their_points.append([current_point, current_point_score])
+        else:
+            my_opponent_choice = random_chooser(what_is_the_best_choice_output)
+            previous_board = copy.deepcopy(new_current_board)
+            new_current_board = copy.deepcopy(new_current_board)
+            new_current_board[my_opponent_choice[0][0]][my_opponent_choice[0][1]] = my_opponent_color
+            capturing_applier_output = capturing_applier(new_current_board, input_my_stone_color)
+            new_current_board = capturing_applier_output[0]
+            current_point_score = current_point_score - capturing_applier_output[1]
+            what_is_the_best_choice_output = what_is_the_best_choice(new_current_board, previous_board, input_my_stone_color)
+            if len(what_is_the_best_choice_output[0][0]) == 0:
+                my_choices_and_their_points.append([current_point, current_point_score])
+            else:
+                my_temp_choices = []
+                a = 0
+                while a < len(what_is_the_best_choice_output):
+                    my_temp_choices.append(what_is_the_best_choice_output[a][0])
+                    a += 1
+
+                my_temp_choices = two_eyes_points_remover(my_temp_choices, input_my_stone_color, new_current_board)
+                if len(my_temp_choices) == 0:
+                    my_choices_and_their_points.append([current_point, current_point_score])
+                else:
+                    shallow_minimax_output = minimax_algorithm_returning_scores(my_temp_choices, new_current_board, input_my_stone_color)
+                    a = 0
+                    while a < len(shallow_minimax_output):
+                        shallow_minimax_output[a][1] = current_point_score + shallow_minimax_output[a][1]
+                        a += 1
+                    my_maximum = shallow_minimax_output[0][1]
+                    a = 1
+                    while a < len(shallow_minimax_output):
+                        if shallow_minimax_output[a][1] > my_maximum:
+                            my_maximum = shallow_minimax_output[a][1]
+                        a += 1
+                    my_choices_and_their_points.append([current_point, my_maximum])
+
+        i += 1
+
+    maximum_point = my_choices_and_their_points[0][1]
+    h = 1
+    while h < len(my_choices_and_their_points):
+        if my_choices_and_their_points[h][1] > maximum_point:
+            maximum_point = my_choices_and_their_points[h][1]
+        h += 1
+
+    my_best_choices = []
+    h = 0
+    while h < len(my_choices_and_their_points):
+        if my_choices_and_their_points[h][1] == maximum_point:
+            my_best_choices.append(my_choices_and_their_points[h][0])
+        h += 1
+
+    return my_best_choices
+
+
+
+
 # Minimax algorithm is implemented in this function
 def minimax_algorithm(input_points_list, input_current_board, input_my_stone_color):
     points_and_utilities = []
@@ -480,58 +684,131 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
             i += 1
 
         if all_zero:
+            black_helper_file = open("black_helper.txt", "wt")
+            black_helper_file.write("2\n")
+            black_helper_file.close()
+
             return [2, 2]
 
-        all_empty_points = all_empty_points_finder(input_current_board)
-        all_remaining_points = suicide_points_remover(all_empty_points, input_my_stone_color, input_current_board)
-        all_remaining_points = KO_rule_applier(all_remaining_points, input_current_board, input_previous_board, input_my_stone_color)
-        all_remaining_points = two_eyes_points_remover(all_remaining_points, input_my_stone_color, input_current_board)
-        all_remaining_points = minimax_algorithm(all_remaining_points, input_current_board, input_my_stone_color)
-        if len(all_remaining_points) == 1:
-            return all_remaining_points[0]
-        else:
-            if len(all_remaining_points) == 0:
-                return "PASS"
-
+        black_helper_file = open("black_helper.txt", "rt")
+        line = black_helper_file.readline()
+        step = int(line.rstrip())
+        black_helper_file.close()
+        if step == 12:
+            all_empty_points = all_empty_points_finder(input_current_board)
+            all_remaining_points = suicide_points_remover(all_empty_points, input_my_stone_color, input_current_board)
+            all_remaining_points = KO_rule_applier(all_remaining_points, input_current_board, input_previous_board,
+                                                   input_my_stone_color)
+            all_remaining_points = two_eyes_points_remover(all_remaining_points, input_my_stone_color,
+                                                           input_current_board)
+            all_remaining_points = minimax_algorithm(all_remaining_points, input_current_board, input_my_stone_color)
+            if len(all_remaining_points) == 1:
+                return all_remaining_points[0]
             else:
-                all_of_my_empty_neighbors = all_of_my_empty_neighbors_finder(input_my_stone_color, input_current_board)
-                good_choices = []
-                p = 0
-                while p < len(all_remaining_points):
-                    if all_remaining_points[p] in all_of_my_empty_neighbors:
-                        good_choices.append(all_remaining_points[p])
-                    p += 1
-
-                if len(good_choices) == 0:
-                    copy_of_remaining_points = copy.deepcopy(all_remaining_points)
-                    if [0, 0] in all_remaining_points:
-                        all_remaining_points.remove([0, 0])
-                    if [0, 4] in all_remaining_points:
-                        all_remaining_points.remove([0, 4])
-                    if [4, 0] in all_remaining_points:
-                        all_remaining_points.remove([4, 0])
-                    if [4, 4] in all_remaining_points:
-                        all_remaining_points.remove([4, 4])
-                    if len(all_remaining_points) == 0:
-                        return random_chooser(copy_of_remaining_points)
-                    else:
-                        return random_chooser(all_remaining_points)
+                if len(all_remaining_points) == 0:
+                    return "PASS"
 
                 else:
-                    good_choices_copy = copy.deepcopy(good_choices)
-                    if [0, 0] in good_choices:
-                        good_choices.remove([0, 0])
-                    if [0, 4] in good_choices:
-                        good_choices.remove([0, 4])
-                    if [4, 0] in good_choices:
-                        good_choices.remove([4, 0])
-                    if [4, 4] in good_choices:
-                        good_choices.remove([4, 4])
+                    all_of_my_empty_neighbors = all_of_my_empty_neighbors_finder(input_my_stone_color,
+                                                                                 input_current_board)
+                    good_choices = []
+                    p = 0
+                    while p < len(all_remaining_points):
+                        if all_remaining_points[p] in all_of_my_empty_neighbors:
+                            good_choices.append(all_remaining_points[p])
+                        p += 1
 
                     if len(good_choices) == 0:
-                        return random_chooser(good_choices_copy)
+                        copy_of_remaining_points = copy.deepcopy(all_remaining_points)
+                        if [0, 0] in all_remaining_points:
+                            all_remaining_points.remove([0, 0])
+                        if [0, 4] in all_remaining_points:
+                            all_remaining_points.remove([0, 4])
+                        if [4, 0] in all_remaining_points:
+                            all_remaining_points.remove([4, 0])
+                        if [4, 4] in all_remaining_points:
+                            all_remaining_points.remove([4, 4])
+                        if len(all_remaining_points) == 0:
+                            return random_chooser(copy_of_remaining_points)
+                        else:
+                            return random_chooser(all_remaining_points)
+
                     else:
-                        return random_chooser(good_choices)
+                        good_choices_copy = copy.deepcopy(good_choices)
+                        if [0, 0] in good_choices:
+                            good_choices.remove([0, 0])
+                        if [0, 4] in good_choices:
+                            good_choices.remove([0, 4])
+                        if [4, 0] in good_choices:
+                            good_choices.remove([4, 0])
+                        if [4, 4] in good_choices:
+                            good_choices.remove([4, 4])
+
+                        if len(good_choices) == 0:
+                            return random_chooser(good_choices_copy)
+                        else:
+                            return random_chooser(good_choices)
+
+        else:
+            black_helper_file = open("black_helper.txt", "wt")
+            new_step = step + 1
+            black_helper_file.write(str(new_step) + "\n")
+            black_helper_file.close()
+            all_empty_points = all_empty_points_finder(input_current_board)
+            all_remaining_points = suicide_points_remover(all_empty_points, input_my_stone_color, input_current_board)
+            all_remaining_points = KO_rule_applier(all_remaining_points, input_current_board, input_previous_board,
+                                                   input_my_stone_color)
+            all_remaining_points = two_eyes_points_remover(all_remaining_points, input_my_stone_color,
+                                                           input_current_board)
+            all_remaining_points = deeper_minimax_algorithm(all_remaining_points, input_current_board, input_my_stone_color)
+            if len(all_remaining_points) == 1:
+                return all_remaining_points[0]
+            else:
+                if len(all_remaining_points) == 0:
+                    return "PASS"
+
+                else:
+                    all_of_my_empty_neighbors = all_of_my_empty_neighbors_finder(input_my_stone_color,
+                                                                                 input_current_board)
+                    good_choices = []
+                    p = 0
+                    while p < len(all_remaining_points):
+                        if all_remaining_points[p] in all_of_my_empty_neighbors:
+                            good_choices.append(all_remaining_points[p])
+                        p += 1
+
+                    if len(good_choices) == 0:
+                        copy_of_remaining_points = copy.deepcopy(all_remaining_points)
+                        if [0, 0] in all_remaining_points:
+                            all_remaining_points.remove([0, 0])
+                        if [0, 4] in all_remaining_points:
+                            all_remaining_points.remove([0, 4])
+                        if [4, 0] in all_remaining_points:
+                            all_remaining_points.remove([4, 0])
+                        if [4, 4] in all_remaining_points:
+                            all_remaining_points.remove([4, 4])
+                        if len(all_remaining_points) == 0:
+                            return random_chooser(copy_of_remaining_points)
+                        else:
+                            return random_chooser(all_remaining_points)
+
+                    else:
+                        good_choices_copy = copy.deepcopy(good_choices)
+                        if [0, 0] in good_choices:
+                            good_choices.remove([0, 0])
+                        if [0, 4] in good_choices:
+                            good_choices.remove([0, 4])
+                        if [4, 0] in good_choices:
+                            good_choices.remove([4, 0])
+                        if [4, 4] in good_choices:
+                            good_choices.remove([4, 4])
+
+                        if len(good_choices) == 0:
+                            return random_chooser(good_choices_copy)
+                        else:
+                            return random_chooser(good_choices)
+
+
 
 
 
@@ -617,10 +894,14 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
                 helper_file.close()
 
                 all_empty_points = all_empty_points_finder(input_current_board)
-                all_remaining_points = suicide_points_remover(all_empty_points, input_my_stone_color, input_current_board)
-                all_remaining_points = KO_rule_applier(all_remaining_points, input_current_board, input_previous_board, input_my_stone_color)
-                all_remaining_points = two_eyes_points_remover(all_remaining_points, input_my_stone_color, input_current_board)
-                all_remaining_points = minimax_algorithm(all_remaining_points, input_current_board, input_my_stone_color)
+                all_remaining_points = suicide_points_remover(all_empty_points, input_my_stone_color,
+                                                              input_current_board)
+                all_remaining_points = KO_rule_applier(all_remaining_points, input_current_board,
+                                                       input_previous_board, input_my_stone_color)
+                all_remaining_points = two_eyes_points_remover(all_remaining_points, input_my_stone_color,
+                                                               input_current_board)
+                all_remaining_points = minimax_algorithm(all_remaining_points, input_current_board,
+                                                         input_my_stone_color)
                 if len(all_remaining_points) == 1:
                     return all_remaining_points[0]
                 else:
@@ -628,7 +909,8 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
                         return "PASS"
 
                     else:
-                        all_of_my_empty_neighbors = all_of_my_empty_neighbors_finder(input_my_stone_color, input_current_board)
+                        all_of_my_empty_neighbors = all_of_my_empty_neighbors_finder(input_my_stone_color,
+                                                                                     input_current_board)
                         good_choices = []
                         p = 0
                         while p < len(all_remaining_points):
@@ -666,7 +948,6 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
                                 return random_chooser(good_choices_copy)
                             else:
                                 return random_chooser(good_choices)
-
 
 
 
