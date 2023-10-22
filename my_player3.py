@@ -447,10 +447,16 @@ def two_eyes_points_remover(input_list, input_my_stone_color, input_current_boar
                     capturing_applier_output = capturing_applier(copy_board, my_opponent_color)
                     my_groups_in_new_board = groups_finder(capturing_applier_output[0], input_my_stone_color)
                     new_current_board = capturing_applier_output[0]
+                    new_maximum_group_length = len(my_groups_in_new_board[0])
+                    p = 1
+                    while p < len(my_groups_in_new_board):
+                        if len(my_groups_in_new_board[p]) > new_maximum_group_length:
+                            new_maximum_group_length = len(my_groups_in_new_board[p])
+                        p += 1
                     a = 0
                     while a < len(my_groups_in_new_board):
                         current_group = my_groups_in_new_board[a]
-                        if len(my_groups_in_new_board[a]) == maximum_group_length:
+                        if len(my_groups_in_new_board[a]) == new_maximum_group_length:
                             j = 0
                             new_empty_neighbors_of_the_group = []
                             while j < len(current_group):
@@ -488,10 +494,16 @@ def two_eyes_points_remover(input_list, input_my_stone_color, input_current_boar
                     capturing_applier_output = capturing_applier(copy_board, my_opponent_color)
                     my_groups_in_new_board = groups_finder(capturing_applier_output[0], input_my_stone_color)
                     new_current_board = capturing_applier_output[0]
+                    new_maximum_group_length = len(my_groups_in_new_board[0])
+                    p = 1
+                    while p < len(my_groups_in_new_board):
+                        if len(my_groups_in_new_board[p]) > new_maximum_group_length:
+                            new_maximum_group_length = len(my_groups_in_new_board[p])
+                        p += 1
                     a = 0
                     while a < len(my_groups_in_new_board):
                         current_group = my_groups_in_new_board[a]
-                        if len(my_groups_in_new_board[a]) == maximum_group_length:
+                        if len(my_groups_in_new_board[a]) == new_maximum_group_length:
                             j = 0
                             new_empty_neighbors_of_the_group = []
                             while j < len(current_group):
