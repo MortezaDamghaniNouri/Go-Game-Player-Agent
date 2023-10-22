@@ -437,9 +437,86 @@ def two_eyes_points_remover(input_list, input_my_stone_color, input_current_boar
 
             if len(empty_neighbors_of_the_group) == 2:
                 if empty_neighbors_of_the_group[0] in output_list:
-                    output_list.remove(empty_neighbors_of_the_group[0])
+                    copy_board = copy.deepcopy(input_current_board)
+                    copy_board[empty_neighbors_of_the_group[0][0]][empty_neighbors_of_the_group[0][1]] = input_my_stone_color
+                    if input_my_stone_color == 1:
+                        my_opponent_color = 2
+                    if input_my_stone_color == 2:
+                        my_opponent_color = 1
+
+                    capturing_applier_output = capturing_applier(copy_board, my_opponent_color)
+                    my_groups_in_new_board = groups_finder(capturing_applier_output[0], input_my_stone_color)
+                    new_current_board = capturing_applier_output[0]
+                    a = 0
+                    while a < len(my_groups_in_new_board):
+                        current_group = my_groups_in_new_board[a]
+                        if len(my_groups_in_new_board[a]) == maximum_group_length:
+                            j = 0
+                            new_empty_neighbors_of_the_group = []
+                            while j < len(current_group):
+                                current_member = current_group[j]
+                                m = current_member[0]
+                                n = current_member[1]
+                                if (m + 1) < board_size and new_current_board[m + 1][n] == 0 and [(m + 1), n] not in new_empty_neighbors_of_the_group:
+                                    new_empty_neighbors_of_the_group.append([(m + 1), n])
+
+                                if (m - 1) >= 0 and new_current_board[m - 1][n] == 0 and [(m - 1), n] not in new_empty_neighbors_of_the_group:
+                                    new_empty_neighbors_of_the_group.append([(m - 1), n])
+
+                                if (n + 1) < board_size and new_current_board[m][n + 1] == 0 and [m, (n + 1)] not in new_empty_neighbors_of_the_group:
+                                    new_empty_neighbors_of_the_group.append([m, (n + 1)])
+
+                                if (n - 1) >= 0 and new_current_board[m][n - 1] == 0 and [m, (n - 1)] not in new_empty_neighbors_of_the_group:
+                                    new_empty_neighbors_of_the_group.append([m, (n - 1)])
+
+                                j += 1
+
+                            if len(new_empty_neighbors_of_the_group) <= 1 and (empty_neighbors_of_the_group[0] in output_list):
+                                output_list.remove(empty_neighbors_of_the_group[0])
+
+                        a += 1
+
+
                 if empty_neighbors_of_the_group[1] in output_list:
-                    output_list.remove(empty_neighbors_of_the_group[1])
+                    copy_board = copy.deepcopy(input_current_board)
+                    copy_board[empty_neighbors_of_the_group[1][0]][empty_neighbors_of_the_group[1][1]] = input_my_stone_color
+                    if input_my_stone_color == 1:
+                        my_opponent_color = 2
+                    if input_my_stone_color == 2:
+                        my_opponent_color = 1
+
+                    capturing_applier_output = capturing_applier(copy_board, my_opponent_color)
+                    my_groups_in_new_board = groups_finder(capturing_applier_output[0], input_my_stone_color)
+                    new_current_board = capturing_applier_output[0]
+                    a = 0
+                    while a < len(my_groups_in_new_board):
+                        current_group = my_groups_in_new_board[a]
+                        if len(my_groups_in_new_board[a]) == maximum_group_length:
+                            j = 0
+                            new_empty_neighbors_of_the_group = []
+                            while j < len(current_group):
+                                current_member = current_group[j]
+                                m = current_member[0]
+                                n = current_member[1]
+                                if (m + 1) < board_size and new_current_board[m + 1][n] == 0 and [(m + 1), n] not in new_empty_neighbors_of_the_group:
+                                    new_empty_neighbors_of_the_group.append([(m + 1), n])
+
+                                if (m - 1) >= 0 and new_current_board[m - 1][n] == 0 and [(m - 1), n] not in new_empty_neighbors_of_the_group:
+                                    new_empty_neighbors_of_the_group.append([(m - 1), n])
+
+                                if (n + 1) < board_size and new_current_board[m][n + 1] == 0 and [m, (n + 1)] not in new_empty_neighbors_of_the_group:
+                                    new_empty_neighbors_of_the_group.append([m, (n + 1)])
+
+                                if (n - 1) >= 0 and new_current_board[m][n - 1] == 0 and [m, (n - 1)] not in new_empty_neighbors_of_the_group:
+                                    new_empty_neighbors_of_the_group.append([m, (n - 1)])
+
+                                j += 1
+
+                            if len(new_empty_neighbors_of_the_group) <= 1 and (empty_neighbors_of_the_group[1] in output_list):
+                                output_list.remove(empty_neighbors_of_the_group[1])
+
+                        a += 1
+
 
         i += 1
 
