@@ -755,7 +755,6 @@ def two_eyes_points_remover(input_list, input_my_stone_color, input_current_boar
 
     return output_list
 
-
 # Go game is implemented in this function
 def go_game(input_my_stone_color, input_previous_board, input_current_board):
     board_size = len(input_current_board[0])
@@ -802,7 +801,10 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
                     my_good_starting_choices.append([2, 3])
                 if input_current_board[3][2] == 0:
                     my_good_starting_choices.append([3, 2])
-                return random_chooser(my_good_starting_choices)
+                my_good_starting_choices = suicide_points_remover(my_good_starting_choices, input_my_stone_color, input_current_board)
+                my_good_starting_choices = KO_rule_applier(my_good_starting_choices, input_current_board, input_previous_board, input_my_stone_color)
+                if len(my_good_starting_choices) != 0:
+                    return random_chooser(my_good_starting_choices)
 
         all_empty_points = all_empty_points_finder(input_current_board)
         all_remaining_points = suicide_points_remover(all_empty_points, input_my_stone_color, input_current_board)
@@ -916,7 +918,11 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
                     new_step = step + 1
                     helper_file.write(str(new_step) + "\n")
                     helper_file.close()
-                    return random_chooser(my_good_starting_choices)
+                    my_good_starting_choices = suicide_points_remover(my_good_starting_choices, input_my_stone_color, input_current_board)
+                    my_good_starting_choices = KO_rule_applier(my_good_starting_choices, input_current_board, input_previous_board, input_my_stone_color)
+                    if len(my_good_starting_choices) != 0:
+                        return random_chooser(my_good_starting_choices)
+
 
             if step == 12:
                 all_empty_points = all_empty_points_finder(input_current_board)
@@ -1014,6 +1020,14 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
                                 return random_chooser(good_choices)
 
 
+# This function generates the output file
+def output_file_generator(final_output):
+    output_file = open("output.txt", "wt")
+    if final_output == "PASS":
+        output_file.write("PASS")
+    else:
+        output_file.write(str(final_output[0]) + "," + str(final_output[1]))
+    output_file.close()
 # This function generates the output file
 def output_file_generator(final_output):
     pass
