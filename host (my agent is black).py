@@ -755,6 +755,7 @@ def two_eyes_points_remover(input_list, input_my_stone_color, input_current_boar
 
     return output_list
 
+
 # Go game is implemented in this function
 def go_game(input_my_stone_color, input_previous_board, input_current_board):
     board_size = len(input_current_board[0])
@@ -790,7 +791,7 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
         black_helper_file.write(str(step + 1) + "\n")
         black_helper_file.close()
 
-        if step == 2 or step == 3 or step == 4 or step == 5:
+        if step == 2 or step == 3:
             if input_current_board[1][2] == 0 or input_current_board[2][1] == 0 or input_current_board[2][3] == 0 or input_current_board[3][2] == 0:
                 my_good_starting_choices = []
                 if input_current_board[1][2] == 0:
