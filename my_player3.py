@@ -570,7 +570,7 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
         black_helper_file.write(str(step + 1) + "\n")
         black_helper_file.close()
 
-        if step == 2 or step == 3:
+        if step == 2 or step == 3 or step == 4:
             if input_current_board[1][2] == 0 or input_current_board[2][1] == 0 or input_current_board[2][3] == 0 or input_current_board[3][2] == 0:
                 my_good_starting_choices = []
                 if input_current_board[1][2] == 0:
@@ -684,15 +684,19 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
             helper_file.close()
 
             if step == 2 and input_current_board[2][2] == 1:
-                my_good_starting_choices = all_of_my_empty_neighbors_finder(input_my_stone_color, input_current_board)
-                if [0, 2] in my_good_starting_choices:
-                    my_good_starting_choices.remove([0, 2])
-                if [2, 4] in my_good_starting_choices:
-                    my_good_starting_choices.remove([2, 4])
-                if [4, 2] in my_good_starting_choices:
-                    my_good_starting_choices.remove([4, 2])
-                if [2, 0] in my_good_starting_choices:
-                    my_good_starting_choices.remove([2, 0])
+                my_good_starting_choices = []
+                if input_current_board[1][2] == 2 or input_current_board[3][2] == 2:
+                    if input_current_board[2][1] == 0:
+                        my_good_starting_choices.append([2, 1])
+                    if input_current_board[2][3] == 0:
+                        my_good_starting_choices.append([2, 3])
+
+                if input_current_board[2][1] == 2 or input_current_board[2][3] == 2:
+                    if input_current_board[1][2] == 0:
+                        my_good_starting_choices.append([1, 2])
+                    if input_current_board[3][2] == 0:
+                        my_good_starting_choices.append([3, 2])
+
                 my_good_starting_choices = suicide_points_remover(my_good_starting_choices, input_my_stone_color, input_current_board)
                 my_good_starting_choices = KO_rule_applier(my_good_starting_choices, input_current_board, input_previous_board, input_my_stone_color)
                 if len(my_good_starting_choices) != 0:
@@ -701,6 +705,27 @@ def go_game(input_my_stone_color, input_previous_board, input_current_board):
                     helper_file.write(str(new_step) + "\n")
                     helper_file.close()
                     return random_chooser(my_good_starting_choices)
+
+            if step == 3:
+                if input_current_board[1][2] == 0 or input_current_board[2][1] == 0 or input_current_board[2][3] == 0 or input_current_board[3][2] == 0:
+                    my_good_starting_choices = []
+                    if input_current_board[1][2] == 0:
+                        my_good_starting_choices.append([1, 2])
+                    if input_current_board[2][1] == 0:
+                        my_good_starting_choices.append([2, 1])
+                    if input_current_board[2][3] == 0:
+                        my_good_starting_choices.append([2, 3])
+                    if input_current_board[3][2] == 0:
+                        my_good_starting_choices.append([3, 2])
+
+                    my_good_starting_choices = suicide_points_remover(my_good_starting_choices, input_my_stone_color, input_current_board)
+                    my_good_starting_choices = KO_rule_applier(my_good_starting_choices, input_current_board, input_previous_board, input_my_stone_color)
+                    if len(my_good_starting_choices) != 0:
+                        helper_file = open("helper.txt", "wt")
+                        new_step = step + 1
+                        helper_file.write(str(new_step) + "\n")
+                        helper_file.close()
+                        return random_chooser(my_good_starting_choices)
 
             if step == 12:
                 all_empty_points = all_empty_points_finder(input_current_board)
